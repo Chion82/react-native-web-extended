@@ -35,6 +35,7 @@ import TouchableHighlight from './components/Touchable/TouchableHighlight'
 import TouchableOpacity from './components/Touchable/TouchableOpacity'
 import TouchableWithoutFeedback from './components/Touchable/TouchableWithoutFeedback'
 import View from './components/View'
+import Navigator from './components/Navigator'
 
 // modules
 import NativeModules from './modules/NativeModules'
@@ -85,6 +86,7 @@ const ReactNative = {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Navigator,
 
   // modules
   NativeModules,

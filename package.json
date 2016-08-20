@@ -24,6 +24,7 @@
     "inline-style-prefixer": "^2.0.0",
     "lodash": "^4.13.1",
     "react-dom": "^15.1.0",
+    "react-router": "^2.6.1",
     "react-textarea-autosize": "^4.0.2",
     "react-timer-mixin": "^0.13.3"
   },
