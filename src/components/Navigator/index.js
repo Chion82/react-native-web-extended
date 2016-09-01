@@ -4,7 +4,15 @@ import React, { Component } from 'react';
 class RouteContent extends Component {
 	render() {
 		const { renderScene, navigator } = this.props.route;
-		const { route } = this.props.location.state;
+        let route = null;
+
+        if (this.props.location && this.props.location.state)
+    		route = this.props.location.state.route;
+
+        if (this.props.params.routeIndex)
+            route = {
+                index : parseInt(this.props.params.routeIndex)
+            };
 
 		return renderScene.call(null, route, navigator);
 	}
@@ -18,7 +26,7 @@ class Navigator extends Component {
 
 		this.navigator.push = (newRoute) => {
 			hashHistory.push({
-				pathname : '/app/',
+				pathname : '/app/' + newRoute.index,
 				state : { route : newRoute}
 			});
 			this.navigator[this.navigator.length] = newRoute;
@@ -32,6 +40,10 @@ class Navigator extends Component {
 			return returnRoute;
 		}
 
+        if (/\/app\/([0-9]+)/.test(location.hash)) {
+            return;
+        }
+
 		if (props.initialRoute) {
 			this.navigator.push(props.initialRoute);
 		}
@@ -40,7 +52,7 @@ class Navigator extends Component {
 	render() {
 		return (
 			<Router history={hashHistory}>
-				<Route path="/app" component={RouteContent} renderScene={this.props.renderScene} navigator={this.navigator}/>
+				<Route path="/app/:routeIndex" component={RouteContent} renderScene={this.props.renderScene} navigator={this.navigator}/>
 			</Router>
 		)
 	}
