@@ -1,5 +1,5 @@
-import { Router, Route, Link, hashHistory, Redirect } from 'react-router';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { Router, Route, Link, hashHistory } from 'react-router';
 
 class RouteContent extends Component {
 	render() {
@@ -19,6 +19,11 @@ class RouteContent extends Component {
 }
 
 class Navigator extends Component {
+
+    static propTypes = {
+        initialRoute : PropTypes.object,
+        renderScene : PropTypes.func.isRequired
+    }
 
 	constructor(props) {
 		super(props);
