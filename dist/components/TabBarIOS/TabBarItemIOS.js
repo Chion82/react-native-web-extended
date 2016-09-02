@@ -77,7 +77,8 @@ marginTop:3}},
 
 _react2.default.createElement(_Text2.default,{style:{
 color:this.props.textColor,
-fontSize:11}},
+fontSize:11,
+textAlign:'center'}},
 this.props.title))));
 
 

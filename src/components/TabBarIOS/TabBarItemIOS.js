@@ -77,7 +77,8 @@ class TabBarItemIOS extends Component {
 
                     <Text style={{
                         color : this.props.textColor,
-                        fontSize : 11
+                        fontSize : 11,
+                        textAlign : 'center'
                     }}>{this.props.title}</Text>
 
                 </View>
