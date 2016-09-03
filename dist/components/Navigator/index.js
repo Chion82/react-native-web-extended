@@ -6,13 +6,13 @@ RouteContent=function(_Component){_inherits(RouteContent,_Component);function Ro
 this.props.route;var renderScene=_props$route.renderScene;var navigator=_props$route.navigator;
 var route=null;
 
-if(this.props.location&&this.props.location.state)
-route=this.props.location.state.route;
-
 if(this.props.params.routeIndex)
 route={
 index:parseInt(this.props.params.routeIndex)};
 
+
+if(this.props.location&&this.props.location.state)
+route=this.props.location.state.route;
 
 return renderScene.call(null,route,navigator);
 }}]);return RouteContent;}(_react.Component);var

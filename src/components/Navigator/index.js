@@ -6,13 +6,13 @@ class RouteContent extends Component {
 		const { renderScene, navigator } = this.props.route;
         let route = null;
 
-        if (this.props.location && this.props.location.state)
-    		route = this.props.location.state.route;
-
         if (this.props.params.routeIndex)
             route = {
                 index : parseInt(this.props.params.routeIndex)
             };
+
+				if (this.props.location && this.props.location.state)
+    			route = this.props.location.state.route;
 
 		return renderScene.call(null, route, navigator);
 	}

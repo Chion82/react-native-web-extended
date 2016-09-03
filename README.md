@@ -6,7 +6,7 @@ Patch for [React Native Web](https://github.com/necolas/react-native-web) is ava
 
 Extended components
 -------------------
-Current 2 more components from [React Native](https://facebook.github.io/react-native/) are added.
+Currently 2 more components from [React Native](https://facebook.github.io/react-native/) are added.
 
 ## Navigator
 
