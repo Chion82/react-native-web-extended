@@ -1,8 +1,19 @@
 React Native Web Extended
 -------------------------
+[![npm version](https://badge.fury.io/js/react-native-web-extended.svg)](https://badge.fury.io/js/react-native-web-extended)
+
 "React Native Web Extended" is a fork of [React Native Web](https://github.com/necolas/react-native-web), with more components migrated from [React Native](https://facebook.github.io/react-native/).
 
 Patch for [React Native Web](https://github.com/necolas/react-native-web) is available in the `patch/react-native-web` branch.
+
+Get Started
+-----------
+Install using npm:  
+```
+npm install react-native-web-extended --save
+```
+
+Boilerplate is coming soon.
 
 Extended components
 -------------------
