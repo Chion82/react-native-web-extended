@@ -43,7 +43,7 @@ render() {
 
 * Currently supported props: `initialRoute`, `renderScene`.  
 * `index` key in the `route` object is required.  
-* `initialRouteStack` props is not supported, as we can't push multiple history states when the webpage loads.
+* `initialRouteStack` prop is not supported, as we can't push multiple history states when the webpage loads.
 
 ## TabBarIOS
 
