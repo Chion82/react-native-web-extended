@@ -17,8 +17,8 @@ Currently 2 more components from [React Native](https://facebook.github.io/react
 ```JavaScript
 render() {
   const routes = [
-    {index: 0},
-    {index: 1},
+    {index: 0, title: 'Page 1'},
+    {index: 1, title: 'Page 2'},
   ];
   return (
     <Navigator
@@ -31,7 +31,7 @@ render() {
             navigator.pop();
           }
         }}>
-        <Text>Hello! Route index is ${route.index}</Text>
+        <Text>Hello! Route index is {route.index}, title is {route.title}</Text>
         </TouchableHighlight>
       }
       style={{padding: 100}}
@@ -42,7 +42,7 @@ render() {
 ### Note:
 
 * Currently supported props: `initialRoute`, `renderScene`.  
-* Currently only `index` key is supported in the `route` object.  
+* `index` key in the `route` object is required.  
 * `initialRouteStack` props is not supported, as we can't push multiple history states when the webpage loads.
 
 ## TabBarIOS
