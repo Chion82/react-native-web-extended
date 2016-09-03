@@ -1,154 +1,151 @@
-# React Native for Web
+React Native Web Extended
+-------------------------
+"React Native Web Extended" is a fork of [React Native Web](https://github.com/necolas/react-native-web), with more components migrated from [React Native](https://facebook.github.io/react-native/).
 
-[![Build Status][travis-image]][travis-url]
-[![npm version][npm-image]][npm-url]
+Patch for [React Native Web](https://github.com/necolas/react-native-web) is available in the `patch/react-native-web` branch.
 
-[React Native][react-native-url] components and APIs for the Web.
+Extended components
+-------------------
+Current 2 more components from [React Native](https://facebook.github.io/react-native/) are added.
 
-Browser support: Chrome, Firefox, Safari >= 7, IE 10, Edge.
+## Navigator
 
-[npm-image]: https://badge.fury.io/js/react-native-web.svg
-[npm-url]: https://npmjs.org/package/react-native-web
-[react-native-url]: https://facebook.github.io/react-native/
-[travis-image]: https://travis-ci.org/necolas/react-native-web.svg?branch=master
-[travis-url]: https://travis-ci.org/necolas/react-native-web
+`Navigator` from [React Native](https://facebook.github.io/react-native/) is re-implemented with [react-router](https://github.com/reactjs/react-router).
 
-## Overview
+### Usage:
 
-"React Native for Web" is a project to bring React Native's building blocks and
-touch handling to the Web. [Read more](#why).
-
-## Quick start
-
-To install in your app:
-
+```JavaScript
+render() {
+  const routes = [
+    {index: 0},
+    {index: 1},
+  ];
+  return (
+    <Navigator
+      initialRoute={routes[0]}
+      renderScene={(route, navigator) =>
+        <TouchableHighlight onPress={() => {
+          if (route.index === 0) {
+            navigator.push(routes[1]);
+          } else {
+            navigator.pop();
+          }
+        }}>
+        <Text>Hello! Route index is ${route.index}</Text>
+        </TouchableHighlight>
+      }
+      style={{padding: 100}}
+    />
+  );
+}
 ```
-npm install --save react react-native-web
-```
+### Note:
 
-Read the [Client and Server rendering](docs/guides/rendering.md) guide.
+* Currently supported props: `initialRoute`, `renderScene`.  
+* Currently only `index` key is supported in the `route` object.  
+* `initialRouteStack` props is not supported, as we can't push multiple history states when the webpage loads.
 
-You can also bootstrap a standard React Native project structure for web by
-using [react-native-web-starter](https://github.com/grabcode/react-native-web-starter).
+## TabBarIOS
 
-## Examples
+### Usage:
 
-* React Native [examples running on Web](https://necolas.github.io/react-native-web/storybook/)
-* [React Native for Web: Playground](http://codepen.io/necolas/pen/PZzwBR).
+```JavaScript
+'use strict';
 
-Sample:
+var React = require('react');
+var ReactNative = require('react-native');
+var {
+  StyleSheet,
+  TabBarIOS,
+  Text,
+  View,
+} = ReactNative;
 
-```js
-import React from 'react'
-import { AppRegistry, Image, StyleSheet, Text, View } from 'react-native'
+var base64Icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAQAAACSR7JhAAADtUlEQVR4Ac3YA2Bj6QLH0XPT1Fzbtm29tW3btm3bfLZtv7e2ObZnms7d8Uw098tuetPzrxv8wiISrtVudrG2JXQZ4VOv+qUfmqCGGl1mqLhoA52oZlb0mrjsnhKpgeUNEs91Z0pd1kvihA3ULGVHiQO2narKSHKkEMulm9VgUyE60s1aWoMQUbpZOWE+kaqs4eLEjdIlZTcFZB0ndc1+lhB1lZrIuk5P2aib1NBpZaL+JaOGIt0ls47SKzLC7CqrlGF6RZ09HGoNy1lYl2aRSWL5GuzqWU1KafRdoRp0iOQEiDzgZPnG6DbldcomadViflnl/cL93tOoVbsOLVM2jylvdWjXolWX1hmfZbGR/wjypDjFLSZIRov09BgYmtUqPQPlQrPapecLgTIy0jMgPKtTeob2zWtrGH3xvjUkPCtNg/tm1rjwrMa+mdUkPd3hWbH0jArPGiU9ufCsNNWFZ40wpwn+62/66R2RUtoso1OB34tnLOcy7YB1fUdc9e0q3yru8PGM773vXsuZ5YIZX+5xmHwHGVvlrGPN6ZSiP1smOsMMde40wKv2VmwPPVXNut4sVpUreZiLBHi0qln/VQeI/LTMYXpsJtFiclUN+5HVZazim+Ky+7sAvxWnvjXrJFneVtLWLyPJu9K3cXLWeOlbMTlrIelbMDlrLenrjEQOtIF+fuI9xRp9ZBFp6+b6WT8RrxEpdK64BuvHgDk+vUy+b5hYk6zfyfs051gRoNO1usU12WWRWL73/MMEy9pMi9qIrR4ZpV16Rrvduxazmy1FSvuFXRkqTnE7m2kdb5U8xGjLw/spRr1uTov4uOgQE+0N/DvFrG/Jt7i/FzwxbA9kDanhf2w+t4V97G8lrT7wc08aA2QNUkuTfW/KimT01wdlfK4yEw030VfT0RtZbzjeMprNq8m8tnSTASrTLti64oBNdpmMQm0eEwvfPwRbUBywG5TzjPCsdwk3IeAXjQblLCoXnDVeoAz6SfJNk5TTzytCNZk/POtTSV40NwOFWzw86wNJRpubpXsn60NJFlHeqlYRbslqZm2jnEZ3qcSKgm0kTli3zZVS7y/iivZTweYXJ26Y+RTbV1zh3hYkgyFGSTKPfRVbRqWWVReaxYeSLarYv1Qqsmh1s95S7G+eEWK0f3jYKTbV6bOwepjfhtafsvUsqrQvrGC8YhmnO9cSCk3yuY984F1vesdHYhWJ5FvASlacshUsajFt2mUM9pqzvKGcyNJW0arTKN1GGGzQlH0tXwLDgQTurS8eIQAAAABJRU5ErkJggg==';
 
-// Components
-const Card = ({ children }) => <View style={styles.card}>{children}</View>
-const Title = ({ children }) => <Text style={styles.title}>{children}</Text>
-const Photo = ({ uri }) => <Image source={{ uri }} style={styles.image} />
-const App = () => (
-  <Card>
-    <Title>App Card</Title>
-    <Photo uri="/some-photo.jpg" />
-  </Card>
-)
+class TabBarExample extends React.Component {
+  static title = '<TabBarIOS>';
+  static description = 'Tab-based navigation.';
+  static displayName = 'TabBarExample';
 
-// Styles
-const styles = StyleSheet.create({
-  card: {
-    flexGrow: 1,
-    justifyContent: 'center'
-  },
-  title: {
-    fontSize: '1.25rem',
-    fontWeight: 'bold'
-  },
-  image: {
-    height: 40,
-    marginVertical: 10,
-    width: 40
+  state = {
+    selectedTab: 'redTab',
+    notifCount: 0,
+    presses: 0,
+  };
+
+  _renderContent = (color: string, pageText: string, num?: number) => {
+    return (
+      <View style={[styles.tabContent, {backgroundColor: color}]}>
+        <Text style={styles.tabText}>{pageText}</Text>
+        <Text style={styles.tabText}>{num} re-renders of the {pageText}</Text>
+      </View>
+    );
+  };
+
+  render() {
+    return (
+      <TabBarIOS
+        unselectedTintColor="yellow"
+        tintColor="white"
+        barTintColor="darkslateblue">
+        <TabBarIOS.Item
+          title="Blue Tab"
+          icon={{uri: base64Icon, scale: 3}}
+          selected={this.state.selectedTab === 'blueTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'blueTab',
+            });
+          }}>
+          {this._renderContent('#414A8C', 'Blue Tab')}
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Tab 2"
+          icon={{uri: base64Icon, scale: 3}}
+          badge={this.state.notifCount > 0 ? this.state.notifCount : undefined}
+          selected={this.state.selectedTab === 'redTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'redTab',
+              notifCount: this.state.notifCount + 1,
+            });
+          }}>
+          {this._renderContent('#783E33', 'Red Tab', this.state.notifCount)}
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          icon={require('./flux.png')}
+          selectedIcon={require('./relay.png')}
+          title="More"
+          selected={this.state.selectedTab === 'greenTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'greenTab',
+              presses: this.state.presses + 1
+            });
+          }}>
+          {this._renderContent('#21551C', 'Green Tab', this.state.presses)}
+        </TabBarIOS.Item>
+      </TabBarIOS>
+    );
   }
-})
+}
 
-// App registration and rendering
-AppRegistry.registerComponent('MyApp', () => App)
-AppRegistry.runApplication('MyApp', { rootTag: document.getElementById('react-root') })
+var styles = StyleSheet.create({
+  tabContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  tabText: {
+    color: 'white',
+    margin: 50,
+  },
+});
+
+module.exports = TabBarExample;
 ```
 
-## Documentation
+### note:
 
-Guides:
-
-* [Accessibility](docs/guides/accessibility.md)
-* [Client and server rendering](docs/guides/rendering.md)
-* [Direct manipulation](docs/guides/direct-manipulation.md)
-* [Known issues](docs/guides/known-issues.md)
-* [React Native](docs/guides/react-native.md)
-* [Style](docs/guides/style.md)
-
-Exported modules:
-
-* Components
-  * [`ActivityIndicator`](docs/components/ActivityIndicator.md)
-  * [`Image`](docs/components/Image.md)
-  * [`ListView`](docs/components/ListView.md)
-  * [`ScrollView`](docs/components/ScrollView.md)
-  * [`Switch`](docs/components/Switch.md)
-  * [`Text`](docs/components/Text.md)
-  * [`TextInput`](docs/components/TextInput.md)
-  * [`TouchableHighlight`](http://facebook.github.io/react-native/releases/0.22/docs/touchablehighlight.html) (mirrors React Native)
-  * [`TouchableOpacity`](http://facebook.github.io/react-native/releases/0.22/docs/touchableopacity.html) (mirrors React Native)
-  * [`TouchableWithoutFeedback`](docs/components/TouchableWithoutFeedback.md)
-  * [`View`](docs/components/View.md)
-* APIs
-  * [`Animated`](http://facebook.github.io/react-native/releases/0.20/docs/animated.html) (mirrors React Native)
-  * [`AppRegistry`](docs/apis/AppRegistry.md)
-  * [`AppState`](docs/apis/AppState.md)
-  * [`AsyncStorage`](docs/apis/AsyncStorage.md)
-  * [`Dimensions`](docs/apis/Dimensions.md)
-  * [`I18nManager`](docs/apis/I18nManager.md)
-  * [`NativeMethods`](docs/apis/NativeMethods.md)
-  * [`NetInfo`](docs/apis/NetInfo.md)
-  * [`PanResponder`](http://facebook.github.io/react-native/releases/0.20/docs/panresponder.html#content) (mirrors React Native)
-  * [`PixelRatio`](docs/apis/PixelRatio.md)
-  * [`Platform`](docs/apis/Platform.md)
-  * [`StyleSheet`](docs/apis/StyleSheet.md)
-  * [`Vibration`](docs/apis/Vibration.md)
-
-<span id="#why"></span>
-## Why?
-
-React Native is a comprehensive JavaScript framework for building application
-user interfaces. It provides high-level, platform-agnostic components and APIs
-– e.g., `Text`, `View`, `Touchable*`, `Animated`, `StyleSheet` - that simplify
-working with layout, gestures, animations, and styles. The entire React Native
-ecosystem can depend on these shared building blocks.
-
-In contrast, the React DOM ecosystem is limited by the lack of a higher-level
-framework. At Twitter, we want to seamlessly author and share React component
-libraries between different Web applications (with increasing interest from
-product teams for multi-platform solutions). This goal draws together multiple,
-inter-related problems including: styling, animation, gestures, themes,
-viewport adaptation, accessibility, diverse build processes, and RTL layouts.
-
-Almost all these problems are avoided, solved, or can be solved in React
-Native. Central to this is React Native's JavaScript style API (not strictly
-"CSS-in-JS") which avoids the key [problems with
-CSS](https://speakerdeck.com/vjeux/react-css-in-js). By giving up some of the
-complexity of CSS it also provides a reliable surface for style composition,
-animation, gestures, server-side rendering, RTL layout; and removes the
-requirement for CSS-specific build tools.
-
-Bringing the React Native APIs and components to the Web has the added benefit
-of allowing teams to explore code-sharing between Native and Web platforms.
-
-## Related projects
-
-* [react-native-web-starter](https://github.com/grabcode/react-native-web-starter)
-* [react-native-web-player](https://github.com/dabbott/react-native-web-player)
-* [react-web](https://github.com/taobaofed/react-web)
-* [react-native-for-web](https://github.com/KodersLab/react-native-for-web)
-
-## License
-
-React Native for Web is [BSD licensed](LICENSE).
+* Supported props for `TabBarIOS` : `barTintColor`, `tintColor`, `unselectedTintColor`  
+* Supported props for `TabBarIOS.Item` : `title`, `icon`, `selectedIcon`, `onPress`, `selected`, `badge`
