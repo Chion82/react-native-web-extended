@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-extended",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Native for Web",
   "main": "dist/index.js",
   "files": [

@@ -20,6 +20,7 @@ var _Platform=require('./apis/Platform');var _Platform2=_interopRequireDefault(_
 var _StyleSheet=require('./apis/StyleSheet');var _StyleSheet2=_interopRequireDefault(_StyleSheet);
 var _UIManager=require('./apis/UIManager');var _UIManager2=_interopRequireDefault(_UIManager);
 var _Vibration=require('./apis/Vibration');var _Vibration2=_interopRequireDefault(_Vibration);
+var _Alert=require('./apis/Alert');var _Alert2=_interopRequireDefault(_Alert);
 
 
 var _ActivityIndicator=require('./components/ActivityIndicator');var _ActivityIndicator2=_interopRequireDefault(_ActivityIndicator);
@@ -46,7 +47,7 @@ var _NativeModules=require('./modules/NativeModules');var _NativeModules2=_inter
 var _ColorPropType=require('./propTypes/ColorPropType');var _ColorPropType2=_interopRequireDefault(_ColorPropType);
 var _EdgeInsetsPropType=require('./propTypes/EdgeInsetsPropType');var _EdgeInsetsPropType2=_interopRequireDefault(_EdgeInsetsPropType);
 var _PointPropType=require('./propTypes/PointPropType');var _PointPropType2=_interopRequireDefault(_PointPropType);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}// modules
-// apis
+
 var ReactNative={
 // top-level API
 findNodeHandle:_findNodeHandle2.default,
@@ -73,6 +74,7 @@ StyleSheet:_StyleSheet2.default,
 Switch:_Switch2.default,
 UIManager:_UIManager2.default,
 Vibration:_Vibration2.default,
+Alert:_Alert2.default,
 
 // components
 ActivityIndicator:_ActivityIndicator2.default,
@@ -98,5 +100,5 @@ ColorPropType:_ColorPropType2.default,
 EdgeInsetsPropType:_EdgeInsetsPropType2.default,
 PointPropType:_PointPropType2.default};// propTypes
 // components
-
+// apis
 module.exports=ReactNative;
