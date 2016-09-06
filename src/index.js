@@ -38,6 +38,7 @@ import TouchableWithoutFeedback from './components/Touchable/TouchableWithoutFee
 import View from './components/View'
 import Navigator from './components/Navigator'
 import TabBarIOS from './components/TabBarIOS'
+import RefreshControl from './components/RefreshControl'
 
 // modules
 import NativeModules from './modules/NativeModules'
@@ -75,6 +76,7 @@ const ReactNative = {
   UIManager,
   Vibration,
   Alert,
+  AlertIOS: Alert,
 
   // components
   ActivityIndicator,
@@ -91,6 +93,7 @@ const ReactNative = {
   View,
   Navigator,
   TabBarIOS,
+  RefreshControl,
 
   // modules
   NativeModules,

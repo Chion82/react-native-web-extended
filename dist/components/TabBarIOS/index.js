@@ -1,10 +1,11 @@
 Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _react=require('react');var _react2=_interopRequireDefault(_react);
 var _View=require('../View');var _View2=_interopRequireDefault(_View);
-var _Text=require('../Text');var _Text2=_interopRequireDefault(_Text);
 var _TabBarItemIOS=require('./TabBarItemIOS');var _TabBarItemIOS2=_interopRequireDefault(_TabBarItemIOS);
 var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
 
 TabBarIOS=function(_Component){_inherits(TabBarIOS,_Component);function TabBarIOS(){_classCallCheck(this,TabBarIOS);return _possibleConstructorReturn(this,(TabBarIOS.__proto__||Object.getPrototypeOf(TabBarIOS)).apply(this,arguments));}_createClass(TabBarIOS,[{key:'getTabBarStyle',value:function getTabBarStyle()
+
+
 
 
 
@@ -32,7 +33,7 @@ return style;
 }},{key:'getContentView',value:function getContentView()
 
 {
-var content=undefined;
+var content=null;
 _react2.default.Children.forEach(this.props.children,function(child){
 if(child.props.selected===true){
 content=child.props.children;
@@ -56,11 +57,7 @@ textColor=_this2.props.tintColor||'#039BE5';
 
 var TabBarItem=child.type;
 
-var tab=_react2.default.createElement(TabBarItem,_extends({
-textColor:textColor,
-displayIcon:displayIcon},
-child.props,{
-key:index}));
+var tab=_react2.default.createElement(TabBarItem,_extends({displayIcon:displayIcon,textColor:textColor},child.props,{key:index}));
 tabs.push(tab);
 });
 return tabs;
@@ -84,7 +81,7 @@ this.renderTabs())));
 
 
 
-}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string,tintColor:_react.PropTypes.string};exports.default=
+}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string,tintColor:_react.PropTypes.string,style:_react.PropTypes.any,children:_react.PropTypes.any};exports.default=
 
 
 

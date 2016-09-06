@@ -17,7 +17,7 @@ Boilerplate is coming soon.
 
 Extended components
 -------------------
-Currently 2 more components from [React Native](https://facebook.github.io/react-native/) are added.
+Currently 3 more components from [React Native](https://facebook.github.io/react-native/) are added.
 
 ## Navigator
 
@@ -161,17 +161,56 @@ module.exports = TabBarExample;
 * Supported props for `TabBarIOS` : `barTintColor`, `tintColor`, `unselectedTintColor`  
 * Supported props for `TabBarIOS.Item` : `title`, `icon`, `selectedIcon`, `onPress`, `selected`, `badge`
 
+## RefreshControl
+
+### Usage:
+
+```JavaScript
+class RefreshableList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
+  _onRefresh() {
+    this.setState({refreshing: true});
+    fetchData().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
+
+  render() {
+    return (
+      <ListView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        }
+        ...
+      >
+      ...
+      </ListView>
+    );
+  }
+  ...
+}
+```
+
 Extended APIs
 -------------
 ## Alert
 Alert box with IOS theme. Vendor: [Alert7](https://github.com/Wildtyto/Alert7.js).
+Alias: AlertIOS
 
 ### Usage:
 
 ```JavaScript
 //Basic Alert
 Alert.alert('Title', 'Hello!');
-
 
 //Multiple Buttons
 Alert.alert(
@@ -182,5 +221,12 @@ Alert.alert(
     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
     {text: 'OK', onPress: () => console.log('OK Pressed')},
   ]
+);
+
+//Text Input
+AlertIOS.prompt(
+  'Title',
+  'Enter a message',
+  text => console.log("You entered "+text)
 );
 ```

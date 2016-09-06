@@ -15,6 +15,10 @@ TabBarItemIOS=function(_Component){_inherits(TabBarItemIOS,_Component);function 
 
 
 
+
+
+
+
 {
 return{
 position:'absolute',
@@ -62,13 +66,13 @@ flex:1,
 justifyContent:'center',
 alignItems:'center'}},
 
-this.props.displayIcon&&_react2.default.createElement(_Image2.default,{resizeMode:'stretch',source:this.props.displayIcon,style:
-this.getImageStyle()}),
-
+this.props.displayIcon&&_react2.default.createElement(_Image2.default,{resizeMode:'stretch',source:this.props.displayIcon,style:this.getImageStyle()}),
 
 this.props.iconComponent,
 
-this.props.badge&&_react2.default.createElement(_Text2.default,{style:this.getBadgeStyle()},this.props.badge)),
+this.props.badge&&
+_react2.default.createElement(_Text2.default,{style:this.getBadgeStyle()},this.props.badge)),
+
 
 
 _react2.default.createElement(_View2.default,{style:{
@@ -85,7 +89,7 @@ this.props.title))));
 
 
 
-}}]);return TabBarItemIOS;}(_react.Component);TabBarItemIOS.propTypes={title:_react.PropTypes.string,icon:_react.PropTypes.any,selectedIcon:_react.PropTypes.any,selected:_react.PropTypes.bool,iconComponent:_react.PropTypes.node};exports.default=
+}}]);return TabBarItemIOS;}(_react.Component);TabBarItemIOS.propTypes={title:_react.PropTypes.string,icon:_react.PropTypes.any,selectedIcon:_react.PropTypes.any,selected:_react.PropTypes.bool,iconComponent:_react.PropTypes.node,badge:_react.PropTypes.any,textColor:_react.PropTypes.any,displayIcon:_react.PropTypes.any,style:_react.PropTypes.any};exports.default=
 
 
 

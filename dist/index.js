@@ -38,6 +38,7 @@ var _TouchableWithoutFeedback=require('./components/Touchable/TouchableWithoutFe
 var _View=require('./components/View');var _View2=_interopRequireDefault(_View);
 var _Navigator=require('./components/Navigator');var _Navigator2=_interopRequireDefault(_Navigator);
 var _TabBarIOS=require('./components/TabBarIOS');var _TabBarIOS2=_interopRequireDefault(_TabBarIOS);
+var _RefreshControl=require('./components/RefreshControl');var _RefreshControl2=_interopRequireDefault(_RefreshControl);
 
 
 var _NativeModules=require('./modules/NativeModules');var _NativeModules2=_interopRequireDefault(_NativeModules);
@@ -47,9 +48,9 @@ var _NativeModules=require('./modules/NativeModules');var _NativeModules2=_inter
 var _ColorPropType=require('./propTypes/ColorPropType');var _ColorPropType2=_interopRequireDefault(_ColorPropType);
 var _EdgeInsetsPropType=require('./propTypes/EdgeInsetsPropType');var _EdgeInsetsPropType2=_interopRequireDefault(_EdgeInsetsPropType);
 var _PointPropType=require('./propTypes/PointPropType');var _PointPropType2=_interopRequireDefault(_PointPropType);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}// modules
-
-var ReactNative={
-// top-level API
+// components
+// apis
+var ReactNative={// top-level API
 findNodeHandle:_findNodeHandle2.default,
 render:_reactDom2.default.render,
 unmountComponentAtNode:_reactDom2.default.unmountComponentAtNode,
@@ -75,6 +76,7 @@ Switch:_Switch2.default,
 UIManager:_UIManager2.default,
 Vibration:_Vibration2.default,
 Alert:_Alert2.default,
+AlertIOS:_Alert2.default,
 
 // components
 ActivityIndicator:_ActivityIndicator2.default,
@@ -91,6 +93,7 @@ TouchableWithoutFeedback:_TouchableWithoutFeedback2.default,
 View:_View2.default,
 Navigator:_Navigator2.default,
 TabBarIOS:_TabBarIOS2.default,
+RefreshControl:_RefreshControl2.default,
 
 // modules
 NativeModules:_NativeModules2.default,
@@ -99,6 +102,6 @@ NativeModules:_NativeModules2.default,
 ColorPropType:_ColorPropType2.default,
 EdgeInsetsPropType:_EdgeInsetsPropType2.default,
 PointPropType:_PointPropType2.default};// propTypes
-// components
-// apis
+
+
 module.exports=ReactNative;

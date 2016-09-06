@@ -1,7 +1,9 @@
 /*
 	Author : Chion82 <tech@chionlab.moe>
-	Dependency : Alert7 by Wildtyto
+	Based on Alert7 by Wildtyto
 */
+
+/* eslint-disable */
 
 /*
  * Alert7.js
@@ -226,7 +228,7 @@ handler:_handler});
 Alert7Class.prototype.present=function(){
 
 this.titleElement.innerText=this.titleElement.textContent=this.title;
-this.messageElement.innerText=this.messageElement.textContent=this.message;
+this.messageElement.innerHTML=this.messageElement.textContent=this.message;
 switch(this.type){
 case _TYPE_CONFIRM:this.instanceElement.classList.add("alert7-confirm");}
 
@@ -272,14 +274,58 @@ _self.dismiss();
 
 })(window.Alert7);
 
+function escapeHTML(string){
+var pre=document.createElement('pre');
+var text=document.createTextNode(string);
+pre.appendChild(text);
+return pre.innerHTML;
+}
+
 var Alert={
-alert:function alert(title){var message=arguments.length<=1||arguments[1]===undefined?'':arguments[1];var buttons=arguments.length<=2||arguments[2]===undefined?[{text:'OK',onPress:function onPress(f){return f;}}]:arguments[2];
-var alertArguments=[title,message];
+alert:function alert(title){var message=arguments.length<=1||arguments[1]===undefined?'':arguments[1];var callbackOrButtons=arguments.length<=2||arguments[2]===undefined?[{text:'OK',onPress:function onPress(f){return f;}}]:arguments[2];
+var alert=new Alert7();
+alert.setTitle(title);
+alert.setMessage(escapeHTML(message));
+if(typeof callbackOrButtons==='function'){
+var callback=callbackOrButtons;
+alert.addAction('OK',callback);
+}else{
+var buttons=callbackOrButtons;
 buttons.forEach(function(button){
-alertArguments.push(button.text||'OK');
-alertArguments.push(button.onPress||function(f){return f;});
+alert.addAction(button.text,button.onPress||function(f){return f;});
 });
-Alert7.alert.apply(Alert7,alertArguments);
+if(buttons.length===2){
+alert.setType(Alert7.TYPE_CONFIRM);
+}
+}
+alert.present();
+},
+
+prompt:function prompt(title){var message=arguments.length<=1||arguments[1]===undefined?'':arguments[1];var callbackOrButtons=arguments.length<=2||arguments[2]===undefined?function(f){return f;}:arguments[2];var type=arguments.length<=3||arguments[3]===undefined?'plain-text':arguments[3];var defaultValue=arguments.length<=4||arguments[4]===undefined?'':arguments[4];
+
+function getInputCallback(callback){
+return function(){
+var text=document.getElementById('alert7-prompt-input').value;
+return callback(text);
+};
+}
+
+var alert=new Alert7();
+alert.setTitle(title);
+alert.setMessage(escapeHTML(message)+("<br/><input type=\""+(type==='secure-text'||type==='login-password'?'password':'text')+"\" value=\""+defaultValue+"\" id=\"alert7-prompt-input\" style=\"width: 100%; height: 18px; border: 1px solid #ccc;\" />"));
+if(typeof callbackOrButtons==='function'){
+var callback=callbackOrButtons;
+alert.addAction('OK',getInputCallback(callback));
+}else{
+var buttons=callbackOrButtons;
+buttons.forEach(function(button){
+alert.addAction(button.text,getInputCallback(button.onPress||function(f){return f;}));
+});
+if(buttons.length===2){
+alert.setType(Alert7.TYPE_CONFIRM);
+}
+}
+alert.present();
 }};exports.default=
 
 

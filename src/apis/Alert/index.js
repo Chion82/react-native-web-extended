@@ -1,7 +1,9 @@
 /*
 	Author : Chion82 <tech@chionlab.moe>
-	Dependency : Alert7 by Wildtyto
+	Based on Alert7 by Wildtyto
 */
+
+/* eslint-disable */
 
 /*
  * Alert7.js
@@ -226,7 +228,7 @@
     Alert7Class.prototype.present = function () {
 
             this.titleElement.innerText = this.titleElement.textContent = this.title;
-            this.messageElement.innerText = this.messageElement.textContent = this.message;
+            this.messageElement.innerHTML = this.messageElement.textContent = this.message;
             switch ( this.type ) {
                 case _TYPE_CONFIRM: this.instanceElement.classList.add("alert7-confirm");
             }
@@ -272,15 +274,59 @@
 
 }(window.Alert7));
 
-const Alert = {
-	alert(title, message='', buttons=[{text:'OK', onPress : (f) => f}]) {
-		let alertArguments = [title, message];
-		buttons.forEach((button) => {
-			alertArguments.push(button.text || 'OK');
-			alertArguments.push(button.onPress || ((f) => f));
-		});
-		Alert7.alert.apply(Alert7, alertArguments);
-	}
+function escapeHTML(string) {
+  let pre = document.createElement('pre');
+  let text = document.createTextNode(string);
+  pre.appendChild(text);
+  return pre.innerHTML;
 }
+
+const Alert = {
+  alert(title, message='', callbackOrButtons=[{text:'OK', onPress : (f) => f}]) {
+    let alert = new Alert7();
+    alert.setTitle(title);
+    alert.setMessage(escapeHTML(message));
+    if (typeof callbackOrButtons === 'function') {
+      const callback = callbackOrButtons;
+      alert.addAction('OK', callback);
+    } else {
+      const buttons = callbackOrButtons;
+      buttons.forEach((button) => {
+        alert.addAction(button.text, button.onPress || (f=>f));
+      });
+      if (buttons.length === 2) {
+        alert.setType(Alert7.TYPE_CONFIRM);
+      }
+    }
+    alert.present();
+  },
+
+  prompt(title, message='', callbackOrButtons=(f) => f, type='plain-text', defaultValue='') {
+
+    function getInputCallback(callback) {
+      return () => {
+        const text = document.getElementById('alert7-prompt-input').value;
+        return callback(text);
+      };
+    }
+
+    let alert = new Alert7();
+    alert.setTitle(title);
+    alert.setMessage(escapeHTML(message) + `<br/><input type="${(type==='secure-text'||type==='login-password')?'password':'text'}" value="${defaultValue}" id="alert7-prompt-input" style="width: 100%; height: 18px; border: 1px solid #ccc;" />`);
+    if (typeof callbackOrButtons === 'function') {
+      const callback = callbackOrButtons;
+      alert.addAction('OK', getInputCallback(callback));
+    } else {
+      const buttons = callbackOrButtons;
+      buttons.forEach((button) => {
+        alert.addAction(button.text, getInputCallback(button.onPress || (f=>f)));
+      });
+      if (buttons.length === 2) {
+        alert.setType(Alert7.TYPE_CONFIRM);
+      }
+    }
+    alert.present();
+  }
+};
 
 export default Alert;

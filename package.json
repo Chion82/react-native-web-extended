@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-extended",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "React Native for Web",
   "main": "dist/index.js",
   "files": [
@@ -24,6 +24,7 @@
     "inline-style-prefixer": "^2.0.0",
     "lodash": "^4.13.1",
     "react-dom": "^15.1.0",
+    "react-pull-to-refresh": "^1.0.6",
     "react-router": "^2.6.1",
     "react-textarea-autosize": "^4.0.2",
     "react-timer-mixin": "^0.13.3"
