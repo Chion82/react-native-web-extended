@@ -82,6 +82,9 @@ export default function WebPullToRefresh() {
 
     //Log initial position top relative to the screen
     pan.initRelativeTop = options.bodyEl.getBoundingClientRect().top;
+
+    //Hide ptr element
+    options.ptrEl.style.visibility = "hidden";
 	};
 
 	/**
@@ -94,6 +97,7 @@ export default function WebPullToRefresh() {
 
 		if ( pan.startingPositionY === 0 && options.bodyEl.getBoundingClientRect().top === pan.initRelativeTop) {
 			pan.enabled = true;
+      options.ptrEl.style.visibility = "visible";
 		}
 	};
 
@@ -216,6 +220,8 @@ export default function WebPullToRefresh() {
 		};
 
 		options.bodyEl.addEventListener( 'transitionend', bodyClassRemove, false );
+
+    options.ptrEl.style.visibility = "hidden";
 	};
 
 	return {
