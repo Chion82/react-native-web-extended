@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import {Router, Route, hashHistory} from 'react-router'
 
+const SVG = `<svg width='72px' height='72px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(0 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(30 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.08333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(60 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.16666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(90 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.25s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(120 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.3333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(150 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.4166666666666667s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(180 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(210 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5833333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(240 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.6666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(270 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.75s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(300 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.8333333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#00b2ff' transform='rotate(330 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.9166666666666666s' repeatCount='indefinite'/></rect></svg>`
+
 class RouteContent extends Component {
 
   static propTypes = {
@@ -10,7 +12,16 @@ class RouteContent extends Component {
     renderScene: PropTypes.func
   };
 
+  hideLoading() {
+    const overlay = document.getElementById('global-loading-overlay')
+    if (overlay) {
+      overlay.remove()
+    }
+  }
+
   render() {
+    setTimeout(this.hideLoading)
+
     const {renderScene, navigator} = this.props.route
     let route = null
 
@@ -40,18 +51,28 @@ class Navigator extends Component {
     this.navigator = []
 
     this.navigator.push = (newRoute) => {
-      hashHistory.push({
-        pathname: '/app/' + newRoute.index,
-        state: {
-          route: newRoute
-        }
+      this.showLoading()
+
+      setTimeout(() => {
+        hashHistory.push({
+          pathname: '/app/' + newRoute.index,
+          state: {
+            route: newRoute
+          }
+        })
       })
+
       this.navigator[this.navigator.length] = newRoute
       return this.navigator.length
     }
 
     this.navigator.pop = () => {
-      hashHistory.goBack()
+      this.showLoading()
+
+      setTimeout(() => {
+        hashHistory.goBack()
+      })
+
       var returnRoute = this.navigator[this.navigator.length - 1]
       this.navigator.splice(this.navigator.length - 1, 1)
       return returnRoute
@@ -64,6 +85,23 @@ class Navigator extends Component {
     if (props.initialRoute) {
       this.navigator.push(props.initialRoute)
     }
+  }
+
+  showLoading() {
+    const overlay = document.createElement('div')
+    overlay.innerHTML = `<div style="text-align:center;">${SVG}</div>`
+    overlay.id = 'global-loading-overlay'
+    overlay.style.display = 'flex'
+    overlay.style['align-items'] = 'center'
+    overlay.style['justify-content'] = 'center'
+    overlay.style['background-color'] = 'white'
+    overlay.style['z-index'] = '9999999'
+    overlay.style.position = 'fixed'
+    overlay.style.top = 0
+    overlay.style.left = 0
+    overlay.style.width = '100%'
+    overlay.style.height = '100%'
+    document.body.appendChild(overlay)
   }
 
   render() {
