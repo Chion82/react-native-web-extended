@@ -33,13 +33,19 @@ class TabBarIOS extends Component {
   }
 
   getContentView() {
-    let content = null
-    React.Children.forEach(this.props.children, (child) => {
+    return React.Children.map(this.props.children, (child, index) => {
+      let props = null;
       if (child.props.selected === true) {
-        content = child.props.children
+        props = { style: { display: 'initial' } }
+      } else {
+        props = { style: { display: 'none'} }
       }
+      return (
+        <View {...props} key={index}>
+          {child.props.children}
+        </View>
+      )
     })
-    return content
   }
 
   renderTabs() {

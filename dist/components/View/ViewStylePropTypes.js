@@ -34,4 +34,5 @@ overflowY:autoOrHiddenOrVisible,
 transition:string,
 userSelect:string,
 visibility:hiddenOrVisible,
-zIndex:number});
+zIndex:number,
+display:string});

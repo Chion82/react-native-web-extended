@@ -33,13 +33,19 @@ return style;
 }},{key:'getContentView',value:function getContentView()
 
 {
-var content=null;
-_react2.default.Children.forEach(this.props.children,function(child){
+return _react2.default.Children.map(this.props.children,function(child,index){
+var props=null;
 if(child.props.selected===true){
-content=child.props.children;
+props={style:{display:'initial'}};
+}else{
+props={style:{display:'none'}};
 }
+return(
+_react2.default.createElement(_View2.default,_extends({},props,{key:index}),
+child.props.children));
+
+
 });
-return content;
 }},{key:'renderTabs',value:function renderTabs()
 
 {var _this2=this;
