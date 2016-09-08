@@ -13,6 +13,8 @@ contentEl:'content',
 // ID of the element holding pull to refresh loading area
 ptrEl:'ptr',
 
+scrollEl:document.body,
+
 // wrapper element holding scollable
 bodyEl:document.body,
 
@@ -39,8 +41,7 @@ var options={};
 var pan={
 enabled:false,
 distance:0,
-startingPositionY:0,
-initRelativeTop:0};
+startingPositionY:0};
 
 
 /**
@@ -62,7 +63,8 @@ bodyEl:params.bodyEl||defaults.bodyEl,
 distanceToRefresh:params.distanceToRefresh||defaults.distanceToRefresh,
 loadingFunction:params.loadingFunction||defaults.loadingFunction,
 resistance:params.resistance||defaults.resistance,
-hammerOptions:params.hammerOptions||{}};
+hammerOptions:params.hammerOptions||{},
+scrollEl:params.scrollEl||defaults.scrollEl};
 
 
 if(!options.contentEl||!options.ptrEl){
@@ -80,9 +82,6 @@ h.on('pandown',_panDown);
 h.on('panup',_panUp);
 h.on('panend',_panEnd);
 
-//Log initial position top relative to the screen
-pan.initRelativeTop=options.bodyEl.getBoundingClientRect().top;
-
 //Hide ptr element
 options.ptrEl.style.visibility="hidden";
 };
@@ -93,9 +92,9 @@ options.ptrEl.style.visibility="hidden";
 	 * @param {object} e - Event object
 	 */
 var _panStart=function _panStart(e){
-pan.startingPositionY=options.bodyEl.scrollTop;
+pan.startingPositionY=options.scrollEl.scrollTop;
 
-if(pan.startingPositionY===0&&options.bodyEl.getBoundingClientRect().top===pan.initRelativeTop){
+if(pan.startingPositionY===0){
 pan.enabled=true;
 options.ptrEl.style.visibility="visible";
 }

@@ -62,15 +62,11 @@ class RefreshControl extends Component {
   }
 
   render() {
-    const style = _.cloneDeep(this.props.style[2] || {})
-    style.overflowY = 'auto'
-
     return (
       <ReactPullToRefresh
         icon={<img width={22} height={22} src={arrowIcon} className="pull-down-icon" />}
         loading={<div className="loading"><ActivityIndicator animating={true} /></div>}
-        onRefresh={this.handleRefresh.bind(this)}
-        style={style}>
+        onRefresh={this.handleRefresh.bind(this)} >
         {this.props.children}
       </ReactPullToRefresh>
     )

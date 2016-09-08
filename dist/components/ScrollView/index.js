@@ -198,7 +198,7 @@ if(refreshControl){
 return _react2.default.cloneElement(
 refreshControl,
 {style:props.style},
-_react2.default.createElement(ScrollViewClass,_extends({},props,{ref:SCROLLVIEW,style:styles.base}),
+_react2.default.createElement(ScrollViewClass,_extends({},props,{ref:SCROLLVIEW,style:props.style}),
 contentContainer));
 
 

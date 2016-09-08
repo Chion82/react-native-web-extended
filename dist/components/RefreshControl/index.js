@@ -62,15 +62,11 @@ resolve();
 }},{key:'render',value:function render()
 
 {
-var style=_lodash2.default.cloneDeep(this.props.style[2]||{});
-style.overflowY='auto';
-
 return(
 _react2.default.createElement(_src2.default,{
 icon:_react2.default.createElement('img',{width:22,height:22,src:arrowIcon,className:'pull-down-icon'}),
 loading:_react2.default.createElement('div',{className:'loading'},_react2.default.createElement(_ActivityIndicator2.default,{animating:true})),
-onRefresh:this.handleRefresh.bind(this),
-style:style},
+onRefresh:this.handleRefresh.bind(this)},
 this.props.children));
 
 

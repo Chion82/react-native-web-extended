@@ -26,7 +26,8 @@ export default class ReactPullToRefresh extends Component {
         distanceToRefresh: this.props.distanceToRefresh || undefined,
         loadingFunction: this.handleRefresh,
         resistance: this.props.resistance || undefined,
-        hammerOptions: this.props.hammerOptions || undefined
+        hammerOptions: this.props.hammerOptions || undefined,
+        scrollEl: this.refs.refresh.children[0]
       });
       this.setState({
         initialized: true
