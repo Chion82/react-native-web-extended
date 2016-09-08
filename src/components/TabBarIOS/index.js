@@ -82,7 +82,7 @@ class TabBarIOS extends Component {
           {this.getContentView()}
         </View>
 
-        <View style={this.getTabBarStyle()}>
+        <View style={this.getTabBarStyle()} className="tabbarios-tabbar-container">
           {this.renderTabs()}
         </View>
       </View>

@@ -82,7 +82,7 @@ paddingBottom:50}},
 this.getContentView()),
 
 
-_react2.default.createElement(_View2.default,{style:this.getTabBarStyle()},
+_react2.default.createElement(_View2.default,{style:this.getTabBarStyle(),className:'tabbarios-tabbar-container'},
 this.renderTabs())));
 
 
