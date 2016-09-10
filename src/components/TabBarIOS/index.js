@@ -3,6 +3,21 @@ import View from '../View'
 import TabBarItemIOS from './TabBarItemIOS'
 import _ from 'lodash'
 
+class ContentWrapper extends Component {
+
+  static propTypes = {
+    children: PropTypes.any
+  }
+
+  shouldComponentUpdate() {
+    return false
+  }
+
+  render() {
+    return <div>{this.props.children}</div>
+  }
+}
+
 class TabBarIOS extends Component {
 
   static Item = TabBarItemIOS
@@ -41,9 +56,9 @@ class TabBarIOS extends Component {
         props = { style: { display: 'none'} }
       }
       return (
-        <View {...props} key={index}>
-          {child.props.children}
-        </View>
+        <div {...props} key={index}>
+          <ContentWrapper>{child.props.children}</ContentWrapper>
+        </div>
       )
     })
   }

@@ -3,7 +3,22 @@ var _View=require('../View');var _View2=_interopRequireDefault(_View);
 var _TabBarItemIOS=require('./TabBarItemIOS');var _TabBarItemIOS2=_interopRequireDefault(_TabBarItemIOS);
 var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
 
-TabBarIOS=function(_Component){_inherits(TabBarIOS,_Component);function TabBarIOS(){_classCallCheck(this,TabBarIOS);return _possibleConstructorReturn(this,(TabBarIOS.__proto__||Object.getPrototypeOf(TabBarIOS)).apply(this,arguments));}_createClass(TabBarIOS,[{key:'getTabBarStyle',value:function getTabBarStyle()
+ContentWrapper=function(_Component){_inherits(ContentWrapper,_Component);function ContentWrapper(){_classCallCheck(this,ContentWrapper);return _possibleConstructorReturn(this,(ContentWrapper.__proto__||Object.getPrototypeOf(ContentWrapper)).apply(this,arguments));}_createClass(ContentWrapper,[{key:'shouldComponentUpdate',value:function shouldComponentUpdate()
+
+
+
+
+
+{
+return false;
+}},{key:'render',value:function render()
+
+{
+return _react2.default.createElement('div',null,this.props.children);
+}}]);return ContentWrapper;}(_react.Component);ContentWrapper.propTypes={children:_react.PropTypes.any};var
+
+
+TabBarIOS=function(_Component2){_inherits(TabBarIOS,_Component2);function TabBarIOS(){_classCallCheck(this,TabBarIOS);return _possibleConstructorReturn(this,(TabBarIOS.__proto__||Object.getPrototypeOf(TabBarIOS)).apply(this,arguments));}_createClass(TabBarIOS,[{key:'getTabBarStyle',value:function getTabBarStyle()
 
 
 
@@ -41,24 +56,24 @@ props={style:{display:'initial'}};
 props={style:{display:'none'}};
 }
 return(
-_react2.default.createElement(_View2.default,_extends({},props,{key:index}),
-child.props.children));
+_react2.default.createElement('div',_extends({},props,{key:index}),
+_react2.default.createElement(ContentWrapper,null,child.props.children)));
 
 
 });
 }},{key:'renderTabs',value:function renderTabs()
 
-{var _this2=this;
+{var _this3=this;
 var tabs=[];
 
 _react2.default.Children.forEach(this.props.children,function(child,index){
 var displayIcon=child.props.icon;
-var textColor=_this2.props.unselectedTintColor||'#ccc';
+var textColor=_this3.props.unselectedTintColor||'#ccc';
 if(child.props.selected){
 if(child.props.selectedIcon){
 displayIcon=child.props.selectedIcon;
 }
-textColor=_this2.props.tintColor||'#039BE5';
+textColor=_this3.props.tintColor||'#039BE5';
 }
 
 var TabBarItem=child.type;
