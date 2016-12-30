@@ -1,5 +1,5 @@
 var _createReactStyleObject=require('../StyleSheet/createReactStyleObject');var _createReactStyleObject2=_interopRequireDefault(_createReactStyleObject);
-var _CSSPropertyOperations=require('react/lib/CSSPropertyOperations');var _CSSPropertyOperations2=_interopRequireDefault(_CSSPropertyOperations);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
+var _CSSPropertyOperations=require('react-dom/lib/CSSPropertyOperations');var _CSSPropertyOperations2=_interopRequireDefault(_CSSPropertyOperations);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
 
 var _measureLayout=function _measureLayout(node,relativeToNativeNode,callback){
 var relativeNode=relativeToNativeNode||node.parentNode;
@@ -33,13 +33,16 @@ var relativeTo=relativeToNativeNode||node.parentNode;
 _measureLayout(node,relativeTo,onSuccess);
 },
 
-updateView:function updateView(node,props,component/* only needed to surpress React errors in development */){
+updateView:function updateView(node,props,component){
 for(var prop in props){
-var value=props[prop];
+if(!Object.prototype.hasOwnProperty.call(props,prop)){
+continue;
+}
 
+var value=props[prop];
 switch(prop){
 case'style':
-// convert styles to DOM-styles
+
 _CSSPropertyOperations2.default.setValueForStyles(
 node,
 (0,_createReactStyleObject2.default)(value),
@@ -49,14 +52,14 @@ break;
 case'class':
 case'className':{
 var nativeProp='class';
-// prevent class names managed by React Native from being replaced
+
 var className=node.getAttribute(nativeProp)+' '+value;
 node.setAttribute(nativeProp,className);
 break;
 }
 case'text':
 case'value':
-// native platforms use `text` prop to replace text input value
+
 node.value=value;
 break;
 default:

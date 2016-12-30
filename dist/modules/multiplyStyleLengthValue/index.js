@@ -1,4 +1,4 @@
-Object.defineProperty(exports,"__esModule",{value:true});var CSS_UNIT_RE=/^[+-]?\d*(?:\.\d+)?(?:[Ee][+-]?\d+)?(\w*)/;
+Object.defineProperty(exports,"__esModule",{value:true});var CSS_UNIT_RE=/^[+-]?\d*(?:\.\d+)?(?:[Ee][+-]?\d+)?(%|\w*)/;
 
 var getUnit=function getUnit(str){return str.match(CSS_UNIT_RE)[1];};
 

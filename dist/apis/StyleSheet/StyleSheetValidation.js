@@ -1,16 +1,16 @@
-var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();/* eslint-disable */
-/**
- * Copyright (c) 2016-present, Nicolas Gallagher.
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
+var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();
 
- * 
- */
+
+
+
+
+
+
 
 var _react=require('react');
 var _ImageStylePropTypes=require('../../components/Image/ImageStylePropTypes');var _ImageStylePropTypes2=_interopRequireDefault(_ImageStylePropTypes);
-var _ReactPropTypeLocations=require('react/lib/ReactPropTypeLocations');var _ReactPropTypeLocations2=_interopRequireDefault(_ReactPropTypeLocations);
-var _ReactPropTypesSecret=require('react/lib/ReactPropTypesSecret');var _ReactPropTypesSecret2=_interopRequireDefault(_ReactPropTypesSecret);
+var _ReactPropTypeLocations=require('react-dom/lib/ReactPropTypeLocations');var _ReactPropTypeLocations2=_interopRequireDefault(_ReactPropTypeLocations);
+var _ReactPropTypesSecret=require('react-dom/lib/ReactPropTypesSecret');var _ReactPropTypesSecret2=_interopRequireDefault(_ReactPropTypesSecret);
 var _TextStylePropTypes=require('../../components/Text/TextStylePropTypes');var _TextStylePropTypes2=_interopRequireDefault(_TextStylePropTypes);
 var _ViewStylePropTypes=require('../../components/View/ViewStylePropTypes');var _ViewStylePropTypes2=_interopRequireDefault(_ViewStylePropTypes);
 var _warning=require('fbjs/lib/warning');var _warning2=_interopRequireDefault(_warning);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}var
@@ -23,7 +23,7 @@ var message1='"'+prop+'" is not a valid style property.';
 var message2='\nValid style props: '+
 JSON.stringify(Object.keys(allStylePropTypes).sort(),null,'  ');
 styleError(message1,style,caller,message2);
-}
+}else{
 var error=allStylePropTypes[prop](
 style,
 prop,
@@ -34,6 +34,7 @@ null,_ReactPropTypesSecret2.default);
 
 if(error){
 styleError(error.message,style,caller);
+}
 }
 }
 }},{key:'validateStyle',value:function validateStyle(
@@ -72,8 +73,9 @@ clear:_react.PropTypes.string,
 cursor:_react.PropTypes.string,
 display:_react.PropTypes.string,
 float:_react.PropTypes.oneOf(['left','none','right']),
-font:_react.PropTypes.string,/* @private */
-listStyle:_react.PropTypes.string});
+font:_react.PropTypes.string,
+listStyle:_react.PropTypes.string,
+WebkitOverflowScrolling:_react.PropTypes.string});
 
 
 module.exports=StyleSheetValidation;

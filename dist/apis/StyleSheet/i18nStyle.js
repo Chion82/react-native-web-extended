@@ -1,9 +1,11 @@
 var _I18nManager=require('../I18nManager');var _I18nManager2=_interopRequireDefault(_I18nManager);
 var _multiplyStyleLengthValue=require('../../modules/multiplyStyleLengthValue');var _multiplyStyleLengthValue2=_interopRequireDefault(_multiplyStyleLengthValue);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
 
-/**
- * Map of property names to their BiDi equivalent.
- */
+var emptyObject={};
+
+
+
+
 var PROPERTIES_TO_SWAP={
 'borderTopLeftRadius':'borderTopRightRadius',
 'borderTopRightRadius':'borderTopLeftRadius',
@@ -33,21 +35,21 @@ var PROPERTIES_SWAP_LTR_RTL={
 'writingDirection':true};
 
 
-/**
- * Invert the sign of a numeric-like value
- */
+
+
+
 var additiveInverse=function additiveInverse(value){return(0,_multiplyStyleLengthValue2.default)(value,-1);};
 
-/**
- * BiDi flip the given property.
- */
+
+
+
 var flipProperty=function flipProperty(prop){
 return PROPERTIES_TO_SWAP.hasOwnProperty(prop)?PROPERTIES_TO_SWAP[prop]:prop;
 };
 
-/**
- * BiDi flip translateX
- */
+
+
+
 var flipTransform=function flipTransform(transform){
 var translateX=transform.translateX;
 if(translateX!=null){
@@ -64,10 +66,13 @@ var swapLtrRtl=function swapLtrRtl(value){
 return value==='ltr'?'rtl':value==='rtl'?'ltr':value;
 };
 
-var i18nStyle=function i18nStyle(){var style=arguments.length<=0||arguments[0]===undefined?{}:arguments[0];
+var i18nStyle=function i18nStyle(){var style=arguments.length>0&&arguments[0]!==undefined?arguments[0]:emptyObject;
 var newStyle={};
 for(var prop in style){
-if(style.hasOwnProperty(prop)){
+if(!Object.prototype.hasOwnProperty.call(style,prop)){
+continue;
+}
+
 var indexOfNoFlip=prop.indexOf('$noI18n');
 
 if(_I18nManager2.default.isRTL){
@@ -95,7 +100,6 @@ var _newProp2=prop.substring(0,indexOfNoFlip);
 newStyle[_newProp2]=style[prop];
 }else{
 newStyle[prop]=style[prop];
-}
 }
 }
 }

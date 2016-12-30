@@ -6,25 +6,25 @@ var _createClass=function(){function defineProperties(target,props){for(var i=0;
 
 
 
-var _react=require('react');function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}/**
- * Copyright (c) 2015-present, Nicolas Gallagher.
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * 
- *//**
- * Renders static content efficiently by allowing React to short-circuit the
- * reconciliation process. This component should be used when you know that a
- * subtree of components will never need to be updated.
- *
- *   const someValue = ...; // We know for certain this value will never change.
- *   return (
- *     <StaticRenderer render={() => <MyComponent value={someValue} />} />
- *   );
- *
- * Typically, you will not need to use this component and should opt for normal
- * React reconciliation.
- */var StaticRenderer=function(_Component){_inherits(StaticRenderer,_Component);function StaticRenderer(){_classCallCheck(this,StaticRenderer);return _possibleConstructorReturn(this,(StaticRenderer.__proto__||Object.getPrototypeOf(StaticRenderer)).apply(this,arguments));}_createClass(StaticRenderer,[{key:'shouldComponentUpdate',value:function shouldComponentUpdate(
+var _react=require('react');function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+StaticRenderer=function(_Component){_inherits(StaticRenderer,_Component);function StaticRenderer(){_classCallCheck(this,StaticRenderer);return _possibleConstructorReturn(this,(StaticRenderer.__proto__||Object.getPrototypeOf(StaticRenderer)).apply(this,arguments));}_createClass(StaticRenderer,[{key:'shouldComponentUpdate',value:function shouldComponentUpdate(
+
+
 
 
 
@@ -34,7 +34,7 @@ return nextProps.shouldUpdate;
 
 {
 return this.props.render();
-}}]);return StaticRenderer;}(_react.Component);StaticRenderer.propTypes={render:_react.PropTypes.func.isRequired,shouldUpdate:_react.PropTypes.bool.isRequired};
+}}]);return StaticRenderer;}(_react.Component);process.env.NODE_ENV!=="production"?StaticRenderer.propTypes={render:_react.PropTypes.func.isRequired,shouldUpdate:_react.PropTypes.bool.isRequired}:void 0;
 
 
 module.exports=StaticRenderer;

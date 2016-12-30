@@ -7,12 +7,12 @@
 
 var _react=require('react');var
 
-arrayOf=_react.PropTypes.arrayOf;/**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * 
- */var number=_react.PropTypes.number;var oneOfType=_react.PropTypes.oneOfType;var shape=_react.PropTypes.shape;var string=_react.PropTypes.string;var numberOrString=oneOfType([number,string]);var TransformPropTypes={transform:arrayOf(oneOfType([
+arrayOf=_react.PropTypes.arrayOf;var number=_react.PropTypes.number;var oneOfType=_react.PropTypes.oneOfType;var shape=_react.PropTypes.shape;var string=_react.PropTypes.string;
+var numberOrString=oneOfType([number,string]);
+
+var TransformPropTypes=process.env.NODE_ENV!=='production'?{
+transform:arrayOf(
+oneOfType([
 shape({perspective:numberOrString}),
 shape({rotate:string}),
 shape({rotateX:string}),
@@ -26,9 +26,9 @@ shape({skewY:string}),
 shape({translateX:numberOrString}),
 shape({translateY:numberOrString}),
 shape({translateZ:numberOrString}),
-shape({translate3d:string})]))};
+shape({translate3d:string})]))}:
 
 
-
+{};
 
 module.exports=TransformPropTypes;

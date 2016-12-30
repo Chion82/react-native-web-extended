@@ -2,15 +2,12 @@ var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++)
 var _applyNativeMethods=require('../../modules/applyNativeMethods');var _applyNativeMethods2=_interopRequireDefault(_applyNativeMethods);
 var _BaseComponentPropTypes=require('../../propTypes/BaseComponentPropTypes');var _BaseComponentPropTypes2=_interopRequireDefault(_BaseComponentPropTypes);
 var _createDOMElement=require('../../modules/createDOMElement');var _createDOMElement2=_interopRequireDefault(_createDOMElement);
-var _react=require('react');
 var _StyleSheet=require('../../apis/StyleSheet');var _StyleSheet2=_interopRequireDefault(_StyleSheet);
 var _StyleSheetPropType=require('../../propTypes/StyleSheetPropType');var _StyleSheetPropType2=_interopRequireDefault(_StyleSheetPropType);
-var _TextStylePropTypes=require('./TextStylePropTypes');var _TextStylePropTypes2=_interopRequireDefault(_TextStylePropTypes);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _objectWithoutProperties(obj,keys){var target={};for(var i in obj){if(keys.indexOf(i)>=0)continue;if(!Object.prototype.hasOwnProperty.call(obj,i))continue;target[i]=obj[i];}return target;}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
+var _TextStylePropTypes=require('./TextStylePropTypes');var _TextStylePropTypes2=_interopRequireDefault(_TextStylePropTypes);
+var _react=require('react');function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _objectWithoutProperties(obj,keys){var target={};for(var i in obj){if(keys.indexOf(i)>=0)continue;if(!Object.prototype.hasOwnProperty.call(obj,i))continue;target[i]=obj[i];}return target;}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
 
-Text=function(_Component){_inherits(Text,_Component);function Text(){var _ref;var _temp,_this,_ret;_classCallCheck(this,Text);for(var _len=arguments.length,args=Array(_len),_key=0;_key<_len;_key++){args[_key]=arguments[_key];}return _ret=(_temp=(_this=_possibleConstructorReturn(this,(_ref=Text.__proto__||Object.getPrototypeOf(Text)).call.apply(_ref,[this].concat(args))),_this),_this.
-
-
-
+Text=function(_Component){_inherits(Text,_Component);function Text(){_classCallCheck(this,Text);return _possibleConstructorReturn(this,(Text.__proto__||Object.getPrototypeOf(Text)).apply(this,arguments));}_createClass(Text,[{key:'render',value:function render()
 
 
 
@@ -29,6 +26,7 @@ Text=function(_Component){_inherits(Text,_Component);function Text(){var _ref;va
 
 
 
+{var _props=
 
 
 
@@ -43,20 +41,37 @@ Text=function(_Component){_inherits(Text,_Component);function Text(){var _ref;va
 
 
 
+this.props;var numberOfLines=_props.numberOfLines;var onPress=_props.onPress;var selectable=_props.selectable;var style=_props.style;var adjustsFontSizeToFit=_props.adjustsFontSizeToFit;var allowFontScaling=_props.allowFontScaling;var ellipsizeMode=_props.ellipsizeMode;var minimumFontScale=_props.minimumFontScale;var onLayout=_props.onLayout;var suppressHighlighting=_props.suppressHighlighting;var otherProps=_objectWithoutProperties(_props,['numberOfLines','onPress','selectable','style','adjustsFontSizeToFit','allowFontScaling','ellipsizeMode','minimumFontScale','onLayout','suppressHighlighting']);
+
+if(onPress){
+otherProps.onClick=onPress;
+otherProps.onKeyDown=this._createEnterHandler(onPress);
+otherProps.tabIndex=0;
+}
+
+otherProps.style=[
+styles.initial,
+style,
+!selectable&&styles.notSelectable,
+numberOfLines===1&&styles.singleLineStyle,
+onPress&&styles.pressable];
 
 
+return(0,_createDOMElement2.default)('span',otherProps);
+}},{key:'_createEnterHandler',value:function _createEnterHandler(
 
+fn){
+return function(e){
+if(e.keyCode===13){
+fn&&fn(e);
+}
+};
+}}]);return Text;}(_react.Component);Text.displayName='Text';Text.defaultProps={accessible:true,selectable:true};process.env.NODE_ENV!=="production"?Text.propTypes=_extends({},_BaseComponentPropTypes2.default,{accessibilityRole:_react.PropTypes.oneOf(['button','heading','link','listitem']),children:_react.PropTypes.any,numberOfLines:_react.PropTypes.number,onLayout:_react.PropTypes.func,onPress:_react.PropTypes.func,selectable:_react.PropTypes.bool,style:(0,_StyleSheetPropType2.default)(_TextStylePropTypes2.default)}):void 0;
 
-
-_onPress=function(e){
-if(_this.props.onPress)_this.props.onPress(e);
-},_temp),_possibleConstructorReturn(_this,_ret);}_createClass(Text,[{key:'render',value:function render(){var _props=this.props;var numberOfLines=_props.numberOfLines;var onLayout=_props.onLayout;var onPress=_props.onPress;var selectable=_props.selectable;var style=_props.style;var other=_objectWithoutProperties(_props,['numberOfLines','onLayout','onPress','selectable','style']);return(0,_createDOMElement2.default)('span',_extends({},other,{onClick:this._onPress,style:[styles.initial,style,!selectable&&styles.notSelectable,numberOfLines===1&&styles.singleLineStyle]}));}}]);return Text;}(_react.Component);Text.displayName='Text';Text.propTypes=_extends({},_BaseComponentPropTypes2.default,{accessibilityRole:_react.PropTypes.oneOf(['heading','link']),children:_react.PropTypes.any,numberOfLines:_react.PropTypes.number,onLayout:_react.PropTypes.func,onPress:_react.PropTypes.func,selectable:_react.PropTypes.bool,style:(0,_StyleSheetPropType2.default)(_TextStylePropTypes2.default)});Text.defaultProps={accessible:true,selectable:true};
-
-
-(0,_applyLayout2.default)((0,_applyNativeMethods2.default)(Text));
 
 var styles=_StyleSheet2.default.create({
 initial:{
+borderWidth:0,
 color:'inherit',
 display:'inline',
 font:'inherit',
@@ -68,6 +83,9 @@ wordWrap:'break-word'},
 notSelectable:{
 userSelect:'none'},
 
+pressable:{
+cursor:'pointer'},
+
 singleLineStyle:{
 maxWidth:'100%',
 overflow:'hidden',
@@ -76,4 +94,4 @@ whiteSpace:'nowrap'}});
 
 
 
-module.exports=Text;
+module.exports=(0,_applyLayout2.default)((0,_applyNativeMethods2.default)(Text));

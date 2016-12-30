@@ -1,30 +1,27 @@
 
 
-var _EventConstants=require('react/lib/EventConstants');var _EventConstants2=_interopRequireDefault(_EventConstants);
-var _EventPluginRegistry=require('react/lib/EventPluginRegistry');var _EventPluginRegistry2=_interopRequireDefault(_EventPluginRegistry);
-var _ResponderEventPlugin=require('react/lib/ResponderEventPlugin');var _ResponderEventPlugin2=_interopRequireDefault(_ResponderEventPlugin);
-var _ResponderTouchHistoryStore=require('react/lib/ResponderTouchHistoryStore');var _ResponderTouchHistoryStore2=_interopRequireDefault(_ResponderTouchHistoryStore);
-var _normalizeNativeEvent=require('./normalizeNativeEvent');var _normalizeNativeEvent2=_interopRequireDefault(_normalizeNativeEvent);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}var _EventConstants$topLe=
+var _EventPluginRegistry=require('react-dom/lib/EventPluginRegistry');var _EventPluginRegistry2=_interopRequireDefault(_EventPluginRegistry);
+var _normalizeNativeEvent=require('./normalizeNativeEvent');var _normalizeNativeEvent2=_interopRequireDefault(_normalizeNativeEvent);
+var _ResponderEventPlugin=require('react-dom/lib/ResponderEventPlugin');var _ResponderEventPlugin2=_interopRequireDefault(_ResponderEventPlugin);
+var _ResponderTouchHistoryStore=require('react-dom/lib/ResponderTouchHistoryStore');var _ResponderTouchHistoryStore2=_interopRequireDefault(_ResponderTouchHistoryStore);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
 
+var topMouseDown='topMouseDown';
+var topMouseMove='topMouseMove';
+var topMouseUp='topMouseUp';
+var topScroll='topScroll';
+var topSelectionChange='topSelectionChange';
+var topTouchCancel='topTouchCancel';
+var topTouchEnd='topTouchEnd';
+var topTouchMove='topTouchMove';
+var topTouchStart='topTouchStart';
 
-
-
-
-
-
-
-
-
-
-_EventConstants2.default.topLevelTypes;// based on https://github.com/facebook/react/pull/4303/files
-var topMouseDown=_EventConstants$topLe.topMouseDown;var topMouseMove=_EventConstants$topLe.topMouseMove;var topMouseUp=_EventConstants$topLe.topMouseUp;var topScroll=_EventConstants$topLe.topScroll;var topSelectionChange=_EventConstants$topLe.topSelectionChange;var topTouchCancel=_EventConstants$topLe.topTouchCancel;var topTouchEnd=_EventConstants$topLe.topTouchEnd;var topTouchMove=_EventConstants$topLe.topTouchMove;var topTouchStart=_EventConstants$topLe.topTouchStart;
 var endDependencies=[topTouchCancel,topTouchEnd,topMouseUp];
 var moveDependencies=[topTouchMove,topMouseMove];
 var startDependencies=[topTouchStart,topMouseDown];
 
-/**
- * Setup ResponderEventPlugin dependencies
- */
+
+
+
 _ResponderEventPlugin2.default.eventTypes.responderMove.dependencies=moveDependencies;
 _ResponderEventPlugin2.default.eventTypes.responderEnd.dependencies=endDependencies;
 _ResponderEventPlugin2.default.eventTypes.responderStart.dependencies=startDependencies;
@@ -41,7 +38,7 @@ _ResponderEventPlugin2.default.eventTypes.startShouldSetResponder.dependencies=s
 var originalRecordTouchTrack=_ResponderTouchHistoryStore2.default.recordTouchTrack;
 
 _ResponderTouchHistoryStore2.default.recordTouchTrack=function(topLevelType,nativeEvent){
-// Filter out mouse-move events when the mouse button is not down
+
 if(topLevelType===topMouseMove&&!_ResponderTouchHistoryStore2.default.touchHistory.touchBank.length){
 return;
 }

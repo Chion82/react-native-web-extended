@@ -15,7 +15,7 @@ return false;
 
 {
 return _react2.default.createElement('div',null,this.props.children);
-}}]);return ContentWrapper;}(_react.Component);ContentWrapper.propTypes={children:_react.PropTypes.any};var
+}}]);return ContentWrapper;}(_react.Component);process.env.NODE_ENV!=="production"?ContentWrapper.propTypes={children:_react.PropTypes.any}:void 0;var
 
 
 TabBarIOS=function(_Component2){_inherits(TabBarIOS,_Component2);function TabBarIOS(){_classCallCheck(this,TabBarIOS);return _possibleConstructorReturn(this,(TabBarIOS.__proto__||Object.getPrototypeOf(TabBarIOS)).apply(this,arguments));}_createClass(TabBarIOS,[{key:'getTabBarStyle',value:function getTabBarStyle()
@@ -102,7 +102,7 @@ this.renderTabs())));
 
 
 
-}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string,tintColor:_react.PropTypes.string,style:_react.PropTypes.any,children:_react.PropTypes.any};exports.default=
+}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;process.env.NODE_ENV!=="production"?TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string,tintColor:_react.PropTypes.string,style:_react.PropTypes.any,children:_react.PropTypes.any}:void 0;exports.default=
 
 
 

@@ -15,16 +15,18 @@ orphans:true,
 widows:true,
 zIndex:true,
 zoom:true,
-// SVG-related
+
 fillOpacity:true,
 strokeDashoffset:true,
 strokeOpacity:true,
 strokeWidth:true,
-// transform types
+
 scale:true,
 scaleX:true,
 scaleY:true,
-scaleZ:true};
+scaleZ:true,
+
+shadowOpacity:true};
 
 
 var normalizeValue=function normalizeValue(property,value){

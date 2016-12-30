@@ -70,7 +70,7 @@ onRefresh:this.handleRefresh.bind(this)},
 this.props.children));
 
 
-}}]);return RefreshControl;}(_react.Component);RefreshControl.propTypes={onRefresh:_react2.default.PropTypes.func.isRequired,refreshing:_react2.default.PropTypes.bool.isRequired,children:_react2.default.PropTypes.any,style:_react2.default.PropTypes.any};exports.default=
+}}]);return RefreshControl;}(_react.Component);process.env.NODE_ENV!=="production"?RefreshControl.propTypes={onRefresh:_react2.default.PropTypes.func.isRequired,refreshing:_react2.default.PropTypes.bool.isRequired,children:_react2.default.PropTypes.any,style:_react2.default.PropTypes.any}:void 0;exports.default=
 
 
 RefreshControl;

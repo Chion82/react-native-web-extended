@@ -1,5 +1,5 @@
 var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _ExecutionEnvironment=require('fbjs/lib/ExecutionEnvironment');var _ExecutionEnvironment2=_interopRequireDefault(_ExecutionEnvironment);
-var _findIndex=require('lodash/findIndex');var _findIndex2=_interopRequireDefault(_findIndex);
+var _arrayFindIndex=require('array-find-index');var _arrayFindIndex2=_interopRequireDefault(_arrayFindIndex);
 var _invariant=require('fbjs/lib/invariant');var _invariant2=_interopRequireDefault(_invariant);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}
 
 var EVENT_TYPES=['change'];
@@ -42,7 +42,7 @@ document.addEventListener(VISIBILITY_CHANGE_EVENT,callback,false);
 type,handler){
 if(AppState.isSupported){
 (0,_invariant2.default)(EVENT_TYPES.indexOf(type)!==-1,'Trying to remove listener for unknown event: "%s"',type);
-var listenerIndex=(0,_findIndex2.default)(listeners,function(pair){return pair[0]===handler;});
+var listenerIndex=(0,_arrayFindIndex2.default)(listeners,function(pair){return pair[0]===handler;});
 (0,_invariant2.default)(listenerIndex!==-1,'Trying to remove AppState listener for unregistered handler');
 var callback=listeners[listenerIndex][1];
 document.removeEventListener(VISIBILITY_CHANGE_EVENT,callback,false);

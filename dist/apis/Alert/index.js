@@ -1,17 +1,17 @@
-/*
-	Author : Chion82 <tech@chionlab.moe>
-	Based on Alert7 by Wildtyto
-*/
 
-/* eslint-disable */
 
-/*
- * Alert7.js
- * https://github.com/Wildtyto/Alert7.js
- *
- * Copyright (c) 2016 Wildtyto
- * Licensed under the MIT licenses.
- */
+
+
+
+
+
+
+
+
+
+
+
+
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});
 
 (function(Alert7){
@@ -282,7 +282,7 @@ return pre.innerHTML;
 }
 
 var Alert={
-alert:function alert(title){var message=arguments.length<=1||arguments[1]===undefined?'':arguments[1];var callbackOrButtons=arguments.length<=2||arguments[2]===undefined?[{text:'OK',onPress:function onPress(f){return f;}}]:arguments[2];
+alert:function alert(title){var message=arguments.length>1&&arguments[1]!==undefined?arguments[1]:'';var callbackOrButtons=arguments.length>2&&arguments[2]!==undefined?arguments[2]:[{text:'OK',onPress:function onPress(f){return f;}}];
 var alert=new Alert7();
 alert.setTitle(title);
 alert.setMessage(escapeHTML(message));
@@ -301,7 +301,7 @@ alert.setType(Alert7.TYPE_CONFIRM);
 alert.present();
 },
 
-prompt:function prompt(title){var message=arguments.length<=1||arguments[1]===undefined?'':arguments[1];var callbackOrButtons=arguments.length<=2||arguments[2]===undefined?function(f){return f;}:arguments[2];var type=arguments.length<=3||arguments[3]===undefined?'plain-text':arguments[3];var defaultValue=arguments.length<=4||arguments[4]===undefined?'':arguments[4];
+prompt:function prompt(title){var message=arguments.length>1&&arguments[1]!==undefined?arguments[1]:'';var callbackOrButtons=arguments.length>2&&arguments[2]!==undefined?arguments[2]:function(f){return f;};var type=arguments.length>3&&arguments[3]!==undefined?arguments[3]:'plain-text';var defaultValue=arguments.length>4&&arguments[4]!==undefined?arguments[4]:'';
 
 function getInputCallback(callback){
 return function(){

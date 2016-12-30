@@ -177,7 +177,7 @@ const ScrollView = React.createClass({
         refreshControl,
         { style: props.style },
         (
-          <ScrollViewClass {...props} ref={this._setScrollViewRef} style={styles.base}>
+          <ScrollViewClass {...props} ref={this._setScrollViewRef} style={props.style}>
             {contentContainer}
           </ScrollViewClass>
         )

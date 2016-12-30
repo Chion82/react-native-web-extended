@@ -1,21 +1,22 @@
-var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}/**
- * Copyright (c) 2015-present, Nicolas Gallagher.
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- */
+var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();
+
+
+
+
+var _deepAssign=require('deep-assign');var _deepAssign2=_interopRequireDefault(_deepAssign);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}
 
 var mergeLocalStorageItem=function mergeLocalStorageItem(key,value){
 var oldValue=window.localStorage.getItem(key);
 var oldObject=JSON.parse(oldValue);
 var newObject=JSON.parse(value);
-var nextValue=JSON.stringify(_extends({},oldObject,newObject));
+var nextValue=JSON.stringify((0,_deepAssign2.default)({},oldObject,newObject));
 window.localStorage.setItem(key,nextValue);
 };var
 
-AsyncStorage=function(){function AsyncStorage(){_classCallCheck(this,AsyncStorage);}_createClass(AsyncStorage,null,[{key:"clear",
-/**
-   * Erases *all* AsyncStorage for the domain.
-   */value:function clear()
+AsyncStorage=function(){function AsyncStorage(){_classCallCheck(this,AsyncStorage);}_createClass(AsyncStorage,null,[{key:'clear',value:function clear()
+
+
+
 {
 return new Promise(function(resolve,reject){
 try{
@@ -25,11 +26,11 @@ resolve(null);
 reject(err);
 }
 });
-}
+}},{key:'getAllKeys',value:function getAllKeys()
 
-/**
-   * Gets *all* keys known to the app, for all callers, libraries, etc.
-   */},{key:"getAllKeys",value:function getAllKeys()
+
+
+
 {
 return new Promise(function(resolve,reject){
 try{
@@ -44,11 +45,11 @@ resolve(keys);
 reject(err);
 }
 });
-}
+}},{key:'getItem',value:function getItem(
 
-/**
-   * Fetches `key` value.
-   */},{key:"getItem",value:function getItem(
+
+
+
 key){
 return new Promise(function(resolve,reject){
 try{
@@ -58,11 +59,11 @@ resolve(value);
 reject(err);
 }
 });
-}
+}},{key:'mergeItem',value:function mergeItem(
 
-/**
-   * Merges existing value with input value, assuming they are stringified JSON.
-   */},{key:"mergeItem",value:function mergeItem(
+
+
+
 key,value){
 return new Promise(function(resolve,reject){
 try{
@@ -72,14 +73,14 @@ resolve(null);
 reject(err);
 }
 });
-}
+}},{key:'multiGet',value:function multiGet(
 
-/**
-   * multiGet resolves to an array of key-value pair arrays that matches the
-   * input format of multiSet.
-   *
-   *   multiGet(['k1', 'k2']) -> [['k1', 'val1'], ['k2', 'val2']]
-   */},{key:"multiGet",value:function multiGet(
+
+
+
+
+
+
 keys){
 var promises=keys.map(function(key){return AsyncStorage.getItem(key);});
 
@@ -87,14 +88,14 @@ return Promise.all(promises).then(
 function(result){return Promise.resolve(result.map(function(value,i){return[keys[i],value];}));},
 function(error){return Promise.reject(error);});
 
-}
+}},{key:'multiMerge',value:function multiMerge(
 
-/**
-   * Takes an array of key-value array pairs and merges them with existing
-   * values, assuming they are stringified JSON.
-   *
-   *   multiMerge([['k1', 'val1'], ['k2', 'val2']])
-   */},{key:"multiMerge",value:function multiMerge(
+
+
+
+
+
+
 keyValuePairs){
 var promises=keyValuePairs.map(function(item){return AsyncStorage.mergeItem(item[0],item[1]);});
 
@@ -102,11 +103,11 @@ return Promise.all(promises).then(
 function(){return Promise.resolve(null);},
 function(error){return Promise.reject(error);});
 
-}
+}},{key:'multiRemove',value:function multiRemove(
 
-/**
-   * Delete all the keys in the `keys` array.
-   */},{key:"multiRemove",value:function multiRemove(
+
+
+
 keys){
 var promises=keys.map(function(key){return AsyncStorage.removeItem(key);});
 
@@ -114,12 +115,12 @@ return Promise.all(promises).then(
 function(){return Promise.resolve(null);},
 function(error){return Promise.reject(error);});
 
-}
+}},{key:'multiSet',value:function multiSet(
 
-/**
-   * Takes an array of key-value array pairs.
-   *   multiSet([['k1', 'val1'], ['k2', 'val2']])
-   */},{key:"multiSet",value:function multiSet(
+
+
+
+
 keyValuePairs){
 var promises=keyValuePairs.map(function(item){return AsyncStorage.setItem(item[0],item[1]);});
 
@@ -127,11 +128,11 @@ return Promise.all(promises).then(
 function(){return Promise.resolve(null);},
 function(error){return Promise.reject(error);});
 
-}
+}},{key:'removeItem',value:function removeItem(
 
-/**
-   * Removes a `key`
-   */},{key:"removeItem",value:function removeItem(
+
+
+
 key){
 return new Promise(function(resolve,reject){
 try{
@@ -141,11 +142,11 @@ resolve(null);
 reject(err);
 }
 });
-}
+}},{key:'setItem',value:function setItem(
 
-/**
-   * Sets `value` for `key`.
-   */},{key:"setItem",value:function setItem(
+
+
+
 key,value){
 return new Promise(function(resolve,reject){
 try{

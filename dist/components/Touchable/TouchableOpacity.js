@@ -1,26 +1,26 @@
-/* eslint-disable */
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule TouchableOpacity
- * @noflow
- */
-'use strict';
 
-// Note (avik): add  when Flow supports spread properties in propTypes
-var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};
-var Animated=require('../../apis/Animated');
+
+
+
+
+
+
+
+
+
+
+
+'use strict';var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};
+
+
+
 var NativeMethodsMixin=require('../../modules/NativeMethodsMixin');
 var React=require('react');
 var StyleSheet=require('../../apis/StyleSheet');
 var TimerMixin=require('react-timer-mixin');
 var Touchable=require('./Touchable');
 var TouchableWithoutFeedback=require('./TouchableWithoutFeedback');
+var View=require('../View');
 
 var ensurePositiveDelayProps=require('./ensurePositiveDelayProps');
 var flattenStyle=StyleSheet.flatten;
@@ -29,51 +29,50 @@ var flattenStyle=StyleSheet.flatten;
 
 var PRESS_RETENTION_OFFSET={top:20,left:20,right:20,bottom:30};
 
-/**
- * A wrapper for making views respond properly to touches.
- * On press down, the opacity of the wrapped view is decreased, dimming it.
- * This is done without actually changing the view hierarchy, and in general is
- * easy to add to an app without weird side-effects.
- *
- * Example:
- *
- * ```
- * renderButton: function() {
- *   return (
- *     <TouchableOpacity onPress={this._onPressButton}>
- *       <Image
- *         style={styles.button}
- *         source={require('image!myButton')}
- *       />
- *     </TouchableOpacity>
- *   );
- * },
- * ```
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var TouchableOpacity=React.createClass({displayName:'TouchableOpacity',
 mixins:[TimerMixin,Touchable.Mixin,NativeMethodsMixin],
 
 propTypes:_extends({},
 TouchableWithoutFeedback.propTypes,{
-/**
-     * Determines what the opacity of the wrapped view should be when touch is
-     * active.
-     */
-activeOpacity:React.PropTypes.number}),
+
+
+
+
+activeOpacity:React.PropTypes.number,
+focusedOpacity:React.PropTypes.number}),
 
 
 getDefaultProps:function getDefaultProps(){
 return{
 accessibilityRole:'button',
-activeOpacity:0.2};
+activeOpacity:0.2,
+focusedOpacity:0.7};
 
 },
 
 getInitialState:function getInitialState(){
-return _extends({},
-this.touchableGetInitialState(),{
-anim:new Animated.Value(1)});
-
+return this.touchableGetInitialState();
 },
 
 componentDidMount:function componentDidMount(){
@@ -84,38 +83,34 @@ componentWillReceiveProps:function componentWillReceiveProps(nextProps){
 ensurePositiveDelayProps(nextProps);
 },
 
-setOpacityTo:function setOpacityTo(value){
-Animated.timing(
-this.state.anim,
-{toValue:value,duration:150}).
-start();
+setOpacityTo:function setOpacityTo(value,duration){
+this.setNativeProps({
+style:{
+opacity:value,
+transitionDuration:duration}});
+
+
 },
 
-/**
-   * `Touchable.Mixin` self callbacks. The mixin will invoke these if they are
-   * defined on your component.
-   */
+
+
+
+
 touchableHandleActivePressIn:function touchableHandleActivePressIn(e){
-this.clearTimeout(this._hideTimeout);
-this._hideTimeout=null;
-this._opacityActive();
+if(e.dispatchConfig.registrationName==='onResponderGrant'){
+this._opacityActive(0);
+}else{
+this._opacityActive(150);
+}
 this.props.onPressIn&&this.props.onPressIn(e);
 },
 
 touchableHandleActivePressOut:function touchableHandleActivePressOut(e){
-if(!this._hideTimeout){
-this._opacityInactive();
-}
+this._opacityInactive(250);
 this.props.onPressOut&&this.props.onPressOut(e);
 },
 
 touchableHandlePress:function touchableHandlePress(e){
-this.clearTimeout(this._hideTimeout);
-this._opacityActive();
-this._hideTimeout=this.setTimeout(
-this._opacityInactive,
-this.props.delayPressOut||100);
-
 this.props.onPress&&this.props.onPress(e);
 },
 
@@ -144,17 +139,20 @@ touchableGetPressOutDelayMS:function touchableGetPressOutDelayMS(){
 return this.props.delayPressOut;
 },
 
-_opacityActive:function _opacityActive(){
-this.setOpacityTo(this.props.activeOpacity);
+_opacityActive:function _opacityActive(duration){
+this.setOpacityTo(this.props.activeOpacity,duration);
 },
 
-_opacityInactive:function _opacityInactive(){
-this.clearTimeout(this._hideTimeout);
-this._hideTimeout=null;
+_opacityInactive:function _opacityInactive(duration){
 var childStyle=flattenStyle(this.props.style)||{};
 this.setOpacityTo(
-childStyle.opacity===undefined?1:childStyle.opacity);
+childStyle.opacity===undefined?1:childStyle.opacity,
+duration);
 
+},
+
+_opacityFocused:function _opacityFocused(){
+this.setOpacityTo(this.props.focusedOpacity);
 },
 
 _onKeyEnter:function _onKeyEnter(e,callback){
@@ -166,7 +164,7 @@ callback&&callback(e);
 
 render:function render(){var _this=this;
 return(
-React.createElement(Animated.View,{
+React.createElement(View,{
 accessible:this.props.accessible!==false,
 accessibilityLabel:this.props.accessibilityLabel,
 accessibilityRole:this.props.accessibilityRole,
@@ -174,8 +172,7 @@ disabled:this.props.disabled,
 style:[
 styles.root,
 this.props.disabled&&styles.disabled,
-this.props.style,
-{opacity:this.state.anim}],
+this.props.style],
 
 testID:this.props.testID,
 onLayout:this.props.onLayout,
@@ -200,6 +197,8 @@ this.props.children));
 var styles=StyleSheet.create({
 root:{
 cursor:'pointer',
+transitionProperty:'opacity',
+transitionDuration:'0.15s',
 userSelect:'none'},
 
 disabled:{

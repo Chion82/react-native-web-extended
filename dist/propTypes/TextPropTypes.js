@@ -8,8 +8,8 @@ var ShadowOffsetPropType=shape({width:number,height:number});
 var TextAlignPropType=oneOf(['center','inherit','justify','justify-all','left','right']);
 var WritingDirectionPropType=oneOf(['auto','ltr','rtl']);
 
-var TextPropTypes={
-// box model
+var TextPropTypes=process.env.NODE_ENV!=='production'?{
+
 color:_ColorPropType2.default,
 fontFamily:string,
 fontSize:numberOrString,
@@ -20,26 +20,23 @@ lineHeight:numberOrString,
 textAlign:TextAlignPropType,
 textAlignVertical:oneOf(['auto','bottom','center','top']),
 textDecorationLine:string,
-/* @platform web */
-textOverflow:string,
-/* @platform web */
-textRendering:oneOf(['auto','geometricPrecision','optimizeLegibility','optimizeSpeed']),
 textShadowColor:_ColorPropType2.default,
 textShadowOffset:ShadowOffsetPropType,
 textShadowRadius:number,
-/* @platform web */
-textTransform:oneOf(['capitalize','lowercase','none','uppercase']),
-/* @platform web */
-unicodeBidi:oneOf(['normal','bidi-override','embed','isolate','isolate-override','plaintext']),
-/* @platform web */
-whiteSpace:string,
-/* @platform web */
-wordWrap:string,
 writingDirection:WritingDirectionPropType,
-// opt-out of RTL flipping
+
+textOverflow:string,
+textRendering:oneOf(['auto','geometricPrecision','optimizeLegibility','optimizeSpeed']),
+textTransform:oneOf(['capitalize','lowercase','none','uppercase']),
+unicodeBidi:oneOf(['normal','bidi-override','embed','isolate','isolate-override','plaintext']),
+whiteSpace:string,
+wordWrap:string,
+MozOsxFontSmoothing:string,
+WebkitFontSmoothing:string,
+
 textAlign$noI18n:TextAlignPropType,
 textShadowOffset$noI18n:ShadowOffsetPropType,
-writingDirection$noI18n:WritingDirectionPropType};
-
+writingDirection$noI18n:WritingDirectionPropType}:
+{};
 
 module.exports=TextPropTypes;

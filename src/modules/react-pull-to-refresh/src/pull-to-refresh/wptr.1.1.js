@@ -1,4 +1,3 @@
-import Hammer from './hammerjs/hammer'
 export default function WebPullToRefresh() {
 	'use strict';
 
@@ -73,14 +72,25 @@ export default function WebPullToRefresh() {
 
 		bodyClass = options.bodyEl.classList;
 
-		var h = new Hammer( options.contentEl, options.hammerOptions );
+		//var h = new Hammer( options.contentEl, options.hammerOptions );
 
-		h.get( 'pan' ).set( { direction: Hammer.DIRECTION_VERTICAL } );
+		var _startingPos = -1;
+		options.contentEl.addEventListener('touchstart', function (e) {
+			_startingPos = e.touches[0].clientY;
+			_panStart(e);
+		});
+		options.contentEl.addEventListener('touchend', _panEnd);
 
-		h.on( 'panstart', _panStart );
-		h.on( 'pandown', _panDown );
-		h.on( 'panup', _panUp );
-		h.on( 'panend', _panEnd );
+		options.contentEl.addEventListener('touchmove', function (e) {
+			if (e.touches[0].clientY > _startingPos) {
+				e.distance = e.touches[0].clientY - _startingPos;
+				_panDown(e);
+			}
+			if (e.touches[0].clientY < _startingPos) {
+				e.distance = _startingPos - e.touches[0].clientY;
+				_panUp(e);
+			}
+		});
 
     //Hide ptr element
     options.ptrEl.style.visibility = "hidden";

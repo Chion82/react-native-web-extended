@@ -1,16 +1,16 @@
-/* eslint-disable */
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule normalizeColor
- * 
- */
-/* eslint no-bitwise: 0 */
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use strict';
 
 function normalizeColor(color){
@@ -23,7 +23,7 @@ return color;
 return null;
 }
 
-// Ordered based on occurrences on Facebook codebase
+
 if(match=matchers.hex6.exec(color)){
 return parseInt(match[1]+'ff',16)>>>0;
 }
@@ -34,43 +34,43 @@ return names[color];
 
 if(match=matchers.rgb.exec(color)){
 return(
-parse255(match[1])<<24|// r
-parse255(match[2])<<16|// g
-parse255(match[3])<<8|// b
-0x000000ff// a
-)>>>0;
+parse255(match[1])<<24|
+parse255(match[2])<<16|
+parse255(match[3])<<8|
+0x000000ff)>>>
+0;
 }
 
 if(match=matchers.rgba.exec(color)){
 return(
-parse255(match[1])<<24|// r
-parse255(match[2])<<16|// g
-parse255(match[3])<<8|// b
-parse1(match[4])// a
-)>>>0;
+parse255(match[1])<<24|
+parse255(match[2])<<16|
+parse255(match[3])<<8|
+parse1(match[4]))>>>
+0;
 }
 
 if(match=matchers.hex3.exec(color)){
 return parseInt(
-match[1]+match[1]+// r
-match[2]+match[2]+// g
-match[3]+match[3]+// b
-'ff',// a
+match[1]+match[1]+
+match[2]+match[2]+
+match[3]+match[3]+
+'ff',
 16)>>>
 0;
 }
 
-// https://drafts.csswg.org/css-color-4/#hex-notation
+
 if(match=matchers.hex8.exec(color)){
 return parseInt(match[1],16)>>>0;
 }
 
 if(match=matchers.hex4.exec(color)){
 return parseInt(
-match[1]+match[1]+// r
-match[2]+match[2]+// g
-match[3]+match[3]+// b
-match[4]+match[4],// a
+match[1]+match[1]+
+match[2]+match[2]+
+match[3]+match[3]+
+match[4]+match[4],
 16)>>>
 0;
 }
@@ -78,23 +78,23 @@ match[4]+match[4],// a
 if(match=matchers.hsl.exec(color)){
 return(
 hslToRgb(
-parse360(match[1]),// h
-parsePercentage(match[2]),// s
-parsePercentage(match[3])// l
-)|
-0x000000ff// a
-)>>>0;
+parse360(match[1]),
+parsePercentage(match[2]),
+parsePercentage(match[3]))|
+
+0x000000ff)>>>
+0;
 }
 
 if(match=matchers.hsla.exec(color)){
 return(
 hslToRgb(
-parse360(match[1]),// h
-parsePercentage(match[2]),// s
-parsePercentage(match[3])// l
-)|
-parse1(match[4])// a
-)>>>0;
+parse360(match[1]),
+parsePercentage(match[2]),
+parsePercentage(match[3]))|
+
+parse1(match[4]))>>>
+0;
 }
 
 return null;
@@ -133,7 +133,7 @@ Math.round(b*255)<<8);
 
 }
 
-// var INTEGER = '[-+]?\\d+';
+
 var NUMBER='[-+]?\\d*\\.?\\d+';
 var PERCENTAGE=NUMBER+'%';
 
@@ -180,7 +180,7 @@ return Math.round(num*255);
 }
 
 function parsePercentage(str){
-// parseFloat conveniently ignores the final %
+
 var int=parseFloat(str,10);
 if(int<0){
 return 0;
@@ -192,13 +192,13 @@ return int/100;
 }
 
 var names={
-/* @edit start */
+
 currentcolor:'currentcolor',
 inherit:'inherit',
-/* @edit end */
+
 transparent:0x00000000,
 
-// http://www.w3.org/TR/css3-color/#svg-color
+
 aliceblue:0xf0f8ffff,
 antiquewhite:0xfaebd7ff,
 aqua:0x00ffffff,

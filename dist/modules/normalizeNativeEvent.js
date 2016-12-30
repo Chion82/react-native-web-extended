@@ -1,5 +1,7 @@
-// Mobile Safari re-uses touch objects, so we copy the properties we want and normalize the identifier
-var normalizeTouches=function normalizeTouches(){var touches=arguments.length<=0||arguments[0]===undefined?[]:arguments[0];return Array.prototype.slice.call(touches).map(function(touch){
+var emptyArray=[];
+
+
+var normalizeTouches=function normalizeTouches(){var touches=arguments.length>0&&arguments[0]!==undefined?arguments[0]:emptyArray;return Array.prototype.slice.call(touches).map(function(touch){
 var identifier=touch.identifier>20?touch.identifier%20:touch.identifier;
 
 var rect=touch.target&&touch.target.getBoundingClientRect();
@@ -22,8 +24,8 @@ rotationAngle:touch.rotationAngle,
 screenX:touch.screenX,
 screenY:touch.screenY,
 target:touch.target,
-// normalize the timestamp
-// https://stackoverflow.com/questions/26177087/ios-8-mobile-safari-wrong-timestamp-on-touch-events
+
+
 timestamp:Date.now()};
 
 });};
@@ -41,8 +43,8 @@ preventDefault:nativeEvent.preventDefault.bind(nativeEvent),
 stopImmediatePropagation:nativeEvent.stopImmediatePropagation.bind(nativeEvent),
 stopPropagation:nativeEvent.stopPropagation.bind(nativeEvent),
 target:nativeEvent.target,
-// normalize the timestamp
-// https://stackoverflow.com/questions/26177087/ios-8-mobile-safari-wrong-timestamp-on-touch-events
+
+
 timestamp:Date.now(),
 touches:touches};
 
@@ -59,7 +61,8 @@ return event;
 }
 
 function normalizeMouseEvent(nativeEvent){
-var touches=[{
+var touches=[
+{
 _normalized:true,
 clientX:nativeEvent.clientX,
 clientY:nativeEvent.clientY,
@@ -74,6 +77,7 @@ screenY:nativeEvent.screenY,
 target:nativeEvent.target,
 timestamp:Date.now()}];
 
+
 return{
 _normalized:true,
 changedTouches:touches,
@@ -87,7 +91,7 @@ stopImmediatePropagation:nativeEvent.stopImmediatePropagation.bind(nativeEvent),
 stopPropagation:nativeEvent.stopPropagation.bind(nativeEvent),
 target:nativeEvent.target,
 timestamp:touches[0].timestamp,
-touches:nativeEvent.type==='mouseup'?[]:touches};
+touches:nativeEvent.type==='mouseup'?emptyArray:touches};
 
 }
 

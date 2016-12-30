@@ -89,7 +89,7 @@ this.props.title))));
 
 
 
-}}]);return TabBarItemIOS;}(_react.Component);TabBarItemIOS.propTypes={title:_react.PropTypes.string,icon:_react.PropTypes.any,selectedIcon:_react.PropTypes.any,selected:_react.PropTypes.bool,iconComponent:_react.PropTypes.node,badge:_react.PropTypes.any,textColor:_react.PropTypes.any,displayIcon:_react.PropTypes.any,style:_react.PropTypes.any};exports.default=
+}}]);return TabBarItemIOS;}(_react.Component);process.env.NODE_ENV!=="production"?TabBarItemIOS.propTypes={title:_react.PropTypes.string,icon:_react.PropTypes.any,selectedIcon:_react.PropTypes.any,selected:_react.PropTypes.bool,iconComponent:_react.PropTypes.node,badge:_react.PropTypes.any,textColor:_react.PropTypes.any,displayIcon:_react.PropTypes.any,style:_react.PropTypes.any}:void 0;exports.default=
 
 
 

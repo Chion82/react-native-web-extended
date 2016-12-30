@@ -87,7 +87,7 @@ children)));
 }}]);return ReactPullToRefresh;}(_react.Component);exports.default=ReactPullToRefresh;
 
 
-ReactPullToRefresh.propTypes={
+process.env.NODE_ENV!=="production"?ReactPullToRefresh.propTypes={
 onRefresh:_react.PropTypes.func.isRequired,
 icon:_react.PropTypes.element,
 loading:_react.PropTypes.element,
@@ -96,4 +96,4 @@ className:_react.PropTypes.string,
 style:_react.PropTypes.object,
 distanceToRefresh:_react.PropTypes.number,
 resistance:_react.PropTypes.number,
-hammerOptions:_react.PropTypes.object};
+hammerOptions:_react.PropTypes.object}:void 0;

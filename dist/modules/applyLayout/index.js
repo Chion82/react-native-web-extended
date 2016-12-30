@@ -7,18 +7,20 @@
 
 var _emptyFunction=require('fbjs/lib/emptyFunction');var _emptyFunction2=_interopRequireDefault(_emptyFunction);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
 
+var emptyObject={};
+
 var applyLayout=function applyLayout(Component){
 var componentDidMount=Component.prototype.componentDidMount||_emptyFunction2.default;
 var componentDidUpdate=Component.prototype.componentDidUpdate||_emptyFunction2.default;
 
 Component.prototype.componentDidMount=function(){
-componentDidMount();
-this._layoutState={};
+componentDidMount.call(this);
+this._layoutState=emptyObject;
 this._handleLayout();
 };
 
 Component.prototype.componentDidUpdate=function(){
-componentDidUpdate();
+componentDidUpdate.call(this);
 this._handleLayout();
 };
 
@@ -38,9 +40,6 @@ _this._layoutState=nextLayout;
 }
 };
 return Component;
-};/**
- * Copyright (c) 2016-present, Nicolas Gallagher.
- * All rights reserved.
- *
- * 
- */module.exports=applyLayout;
+};
+
+module.exports=applyLayout;
