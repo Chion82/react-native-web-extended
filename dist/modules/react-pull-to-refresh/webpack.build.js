@@ -1,6 +1,5 @@
 var path=require('path');
 var webpack=require('webpack');
-var BASE_DIR='./';
 var COMPONENT_NAME='react-pull-to-refresh';
 var plugins=[];
 

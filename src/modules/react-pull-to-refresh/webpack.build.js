@@ -1,8 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
-var BASE_DIR = './'
-var COMPONENT_NAME = 'react-pull-to-refresh';
-var plugins = [];
+const path = require('path');
+const webpack = require('webpack');
+let COMPONENT_NAME = 'react-pull-to-refresh';
+const plugins = [];
 
 function getPackageMain() {
   return require(path.resolve('./package.json')).main;
@@ -17,7 +16,7 @@ if (process.env.MINIFY) {
 module.exports = {
   entry: path.resolve(getPackageMain()),
   output: {
-    filename: path.resolve('./dist/' + COMPONENT_NAME + '.js'),
+    filename: path.resolve(`./dist/${COMPONENT_NAME}.js`),
     library: COMPONENT_NAME,
     libraryTarget: 'umd'
   },

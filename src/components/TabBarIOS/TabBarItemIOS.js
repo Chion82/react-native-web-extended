@@ -1,22 +1,22 @@
-import React, { Component, PropTypes } from 'react'
-import View from '../View'
-import Image from '../Image'
-import Text from '../Text'
-import TouchableOpacity from '../Touchable/TouchableOpacity'
-import _ from 'lodash'
+import React, { Component, PropTypes } from 'react';
+import View from '../View';
+import Image from '../Image';
+import Text from '../Text';
+import TouchableOpacity from '../Touchable/TouchableOpacity';
+import _ from 'lodash';
 
 class TabBarItemIOS extends Component {
 
   static propTypes = {
-    title: PropTypes.string,
-    icon: PropTypes.any,
-    selectedIcon: PropTypes.any,
-    selected: PropTypes.bool,
-    iconComponent: PropTypes.node,
     badge: PropTypes.any,
-    textColor: PropTypes.any,
     displayIcon: PropTypes.any,
-    style: PropTypes.any
+    icon: PropTypes.any,
+    iconComponent: PropTypes.node,
+    selected: PropTypes.bool,
+    selectedIcon: PropTypes.any,
+    style: PropTypes.any,
+    textColor: PropTypes.any,
+    title: PropTypes.string
   }
 
   getBadgeStyle() {
@@ -32,23 +32,23 @@ class TabBarItemIOS extends Component {
       height: 18,
       textAlign: 'center',
       lineHeight: 20
-    }
+    };
   }
 
   getImageStyle() {
-    let defaultStyle = {
+    const defaultStyle = {
       width: 26,
       height: 26
-    }
-    return _.assign(defaultStyle, this.props.style)
+    };
+    return _.assign(defaultStyle, this.props.style);
   }
 
   getWrapperProps() {
-    let props = _.clone(this.props)
+    const props = _.clone(this.props);
     if (props.style) {
-      delete props.style
+      delete props.style;
     }
-    return props
+    return props;
   }
 
   render() {
@@ -66,7 +66,9 @@ class TabBarItemIOS extends Component {
           justifyContent: 'center',
           alignItems: 'center'
         }}>
-          {this.props.displayIcon && (<Image resizeMode="stretch" source={this.props.displayIcon} style={this.getImageStyle()} />)}
+          {this.props.displayIcon && (
+            <Image resizeMode='stretch' source={this.props.displayIcon} style={this.getImageStyle()} />
+          )}
 
           {this.props.iconComponent}
 
@@ -88,9 +90,9 @@ class TabBarItemIOS extends Component {
         </View>
 
       </TouchableOpacity>
-    )
+    );
   }
 
 }
 
-export default TabBarItemIOS
+export default TabBarItemIOS;

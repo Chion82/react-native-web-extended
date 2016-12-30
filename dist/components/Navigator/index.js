@@ -16,7 +16,7 @@ var route=null;
 
 if(this.props.params.routeIndex){
 route={
-index:parseInt(this.props.params.routeIndex)};
+index:parseInt(this.props.params.routeIndex,10)};
 
 }
 
@@ -25,7 +25,7 @@ route=this.props.location.state.route;
 }
 
 return renderScene(route,navigator);
-}}]);return RouteContent;}(_react.Component);process.env.NODE_ENV!=="production"?RouteContent.propTypes={route:_react.PropTypes.any,params:_react.PropTypes.any,location:_react.PropTypes.any,renderScene:_react.PropTypes.func}:void 0;var
+}}]);return RouteContent;}(_react.Component);process.env.NODE_ENV!=="production"?RouteContent.propTypes={location:_react.PropTypes.any,params:_react.PropTypes.any,renderScene:_react.PropTypes.func,route:_react.PropTypes.any}:void 0;var
 
 
 Navigator=function(_Component2){_inherits(Navigator,_Component2);
@@ -69,7 +69,8 @@ _this2.navigator.push(props.initialRoute);
 {
 return(
 _react2.default.createElement(_reactRouter.Router,{history:_reactRouter.hashHistory},
-_react2.default.createElement(_reactRouter.Route,{component:RouteContent,navigator:this.navigator,path:'/app/:routeIndex',renderScene:this.props.renderScene})));
+_react2.default.createElement(_reactRouter.Route,{component:RouteContent,navigator:this.navigator,
+path:'/app/:routeIndex',renderScene:this.props.renderScene})));
 
 
 }}]);return Navigator;}(_react.Component);process.env.NODE_ENV!=="production"?Navigator.propTypes={initialRoute:_react.PropTypes.object,renderScene:_react.PropTypes.func.isRequired}:void 0;exports.default=

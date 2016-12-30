@@ -1,12 +1,12 @@
-var fs = require('fs');
-var path = require('path');
-var REGEX_TEST = /\-test\.js$/;
+const fs = require('fs');
+const path = require('path');
+const REGEX_TEST = /-test\.js$/;
 
 function findTests(dir) {
-  var tests = [];
+  let tests = [];
   fs.readdirSync(dir).forEach(function (file) {
     file = path.resolve(dir, file);
-    var stat = fs.statSync(file);
+    const stat = fs.statSync(file);
     if (stat && stat.isDirectory()) {
       tests = tests.concat(findTests(file));
     } else if (REGEX_TEST.test(file)) {
@@ -16,19 +16,19 @@ function findTests(dir) {
   return tests;
 }
 
-var tests = findTests(path.resolve('./lib'));
+const tests = findTests(path.resolve('./lib'));
 
-module.exports = function(config) {
-  var conf = {
+module.exports = function (config) {
+  const conf = {
     basePath: '',
 
-    frameworks: ['mocha'],
+    frameworks: [ 'mocha' ],
 
     files: tests,
 
     preprocessors: {},
 
-    reporters: ['dots'],
+    reporters: [ 'dots' ],
 
     port: 9876,
 
@@ -38,7 +38,7 @@ module.exports = function(config) {
 
     autoWatch: true,
 
-    browsers: ['Chrome'],
+    browsers: [ 'Chrome' ],
 
     captureTimeout: 60000,
 
@@ -66,7 +66,7 @@ module.exports = function(config) {
   };
 
   tests.forEach(function (test) {
-    conf.preprocessors[test] = ['webpack', 'sourcemap'];
+    conf.preprocessors[test] = [ 'webpack', 'sourcemap' ];
   });
 
   config.set(conf);

@@ -66,7 +66,9 @@ flex:1,
 justifyContent:'center',
 alignItems:'center'}},
 
-this.props.displayIcon&&_react2.default.createElement(_Image2.default,{resizeMode:'stretch',source:this.props.displayIcon,style:this.getImageStyle()}),
+this.props.displayIcon&&
+_react2.default.createElement(_Image2.default,{resizeMode:'stretch',source:this.props.displayIcon,style:this.getImageStyle()}),
+
 
 this.props.iconComponent,
 
@@ -89,7 +91,7 @@ this.props.title))));
 
 
 
-}}]);return TabBarItemIOS;}(_react.Component);process.env.NODE_ENV!=="production"?TabBarItemIOS.propTypes={title:_react.PropTypes.string,icon:_react.PropTypes.any,selectedIcon:_react.PropTypes.any,selected:_react.PropTypes.bool,iconComponent:_react.PropTypes.node,badge:_react.PropTypes.any,textColor:_react.PropTypes.any,displayIcon:_react.PropTypes.any,style:_react.PropTypes.any}:void 0;exports.default=
+}}]);return TabBarItemIOS;}(_react.Component);process.env.NODE_ENV!=="production"?TabBarItemIOS.propTypes={badge:_react.PropTypes.any,displayIcon:_react.PropTypes.any,icon:_react.PropTypes.any,iconComponent:_react.PropTypes.node,selected:_react.PropTypes.bool,selectedIcon:_react.PropTypes.any,style:_react.PropTypes.any,textColor:_react.PropTypes.any,title:_react.PropTypes.string}:void 0;exports.default=
 
 
 

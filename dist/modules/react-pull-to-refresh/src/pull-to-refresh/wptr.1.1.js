@@ -1,4 +1,5 @@
-Object.defineProperty(exports,"__esModule",{value:true});exports.default=WebPullToRefresh;function WebPullToRefresh(){
+Object.defineProperty(exports,"__esModule",{value:true});exports.default=
+WebPullToRefresh;function WebPullToRefresh(){
 'use strict';
 
 
@@ -93,7 +94,7 @@ _panUp(e);
 });
 
 
-options.ptrEl.style.visibility="hidden";
+options.ptrEl.style.visibility='hidden';
 };
 
 
@@ -106,7 +107,7 @@ pan.startingPositionY=options.scrollEl.scrollTop;
 
 if(pan.startingPositionY===0){
 pan.enabled=true;
-options.ptrEl.style.visibility="visible";
+options.ptrEl.style.visibility='visible';
 }
 };
 
@@ -230,11 +231,10 @@ options.bodyEl.removeEventListener('transitionend',bodyClassRemove,false);
 
 options.bodyEl.addEventListener('transitionend',bodyClassRemove,false);
 
-options.ptrEl.style.visibility="hidden";
+options.ptrEl.style.visibility='hidden';
 };
 
 return{
 init:init};
-
 
 }

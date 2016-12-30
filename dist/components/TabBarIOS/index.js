@@ -97,12 +97,12 @@ paddingBottom:50}},
 this.getContentView()),
 
 
-_react2.default.createElement(_View2.default,{style:this.getTabBarStyle(),className:'tabbarios-tabbar-container'},
+_react2.default.createElement(_View2.default,{className:'tabbarios-tabbar-container',style:this.getTabBarStyle()},
 this.renderTabs())));
 
 
 
-}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;process.env.NODE_ENV!=="production"?TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string,tintColor:_react.PropTypes.string,style:_react.PropTypes.any,children:_react.PropTypes.any}:void 0;exports.default=
+}}]);return TabBarIOS;}(_react.Component);TabBarIOS.Item=_TabBarItemIOS2.default;process.env.NODE_ENV!=="production"?TabBarIOS.propTypes={barTintColor:_react.PropTypes.string,children:_react.PropTypes.any,style:_react.PropTypes.any,tintColor:_react.PropTypes.string,unselectedTintColor:_react.PropTypes.string}:void 0;exports.default=
 
 
 

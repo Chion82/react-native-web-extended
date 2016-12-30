@@ -1,6 +1,6 @@
 var fs=require('fs');
 var path=require('path');
-var REGEX_TEST=/\-test\.js$/;
+var REGEX_TEST=/-test\.js$/;
 
 function findTests(dir){
 var tests=[];

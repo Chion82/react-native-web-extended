@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { PropTypes, Component } from 'react';
 import WebPullToRefresh from '../pull-to-refresh/wptr.1.1';
 
@@ -69,17 +70,17 @@ export default class ReactPullToRefresh extends Component {
     }
 
     return (
-      <div ref="body" {...rest}>
-        <div ref="ptr" className="ptr-element">
-          {icon || <span className="genericon genericon-next"></span>}
+      <div ref='body' {...rest}>
+        <div ref='ptr' className='ptr-element'>
+          {icon || <span className='genericon genericon-next' />}
           {loading ||
-            <div className="loading">
-              <span className="loading-ptr-1"></span>
-              <span className="loading-ptr-2"></span>
-              <span className="loading-ptr-3"></span>
-           </div>}
+            <div className='loading'>
+              <span className='loading-ptr-1' />
+              <span className='loading-ptr-2' />
+              <span className='loading-ptr-3' />
+            </div>}
         </div>
-        <div ref="refresh" className="refresh-view">
+        <div ref='refresh' className='refresh-view'>
           {children}
         </div>
       </div>
