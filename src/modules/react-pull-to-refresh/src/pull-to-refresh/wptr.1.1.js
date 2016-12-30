@@ -180,7 +180,9 @@ export default function WebPullToRefresh() {
       return;
     }
 
-    e.preventDefault();
+    if (pan.distance !== 0) {
+      e.preventDefault();
+    }
 
     options.contentEl.style.transform = options.contentEl.style.webkitTransform = '';
     options.ptrEl.style.transform = options.ptrEl.style.webkitTransform = '';
