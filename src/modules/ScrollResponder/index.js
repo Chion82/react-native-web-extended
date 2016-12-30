@@ -13,9 +13,9 @@
 'use strict';
 
 var Dimensions = require('../../apis/Dimensions');
+var findNodeHandle = require('../findNodeHandle');
 var Platform = require('../../apis/Platform');
 var React = require('react');
-var ReactDOM = require('react-dom');
 // var Subscribable = require('../Subscribable');
 var TextInputState = require('../../components/TextInput/TextInputState');
 var UIManager = require('../../apis/UIManager');
@@ -104,6 +104,8 @@ var warning = require('fbjs/lib/warning');
  *   this.props.onKeyboardWillHide
  *   this.props.onKeyboardDidHide
  */
+
+const emptyObject = {};
 
 var IS_ANIMATING_TOUCH_START_THRESHOLD_MS = 16;
 
@@ -356,7 +358,7 @@ var ScrollResponderMixin = {
   scrollResponderGetScrollableNode: function(): any {
     return this.getScrollableNode ?
       this.getScrollableNode() :
-      ReactDOM.findDOMNode(this);
+      findNodeHandle(this);
   },
 
   /**
@@ -378,7 +380,7 @@ var ScrollResponderMixin = {
     if (typeof x === 'number') {
       console.warn('`scrollResponderScrollTo(x, y, animated)` is deprecated. Use `scrollResponderScrollTo({x: 5, y: 5, animated: true})` instead.');
     } else {
-      ({x, y, animated} = x || {});
+      ({x, y, animated} = x || emptyObject);
     }
     const node = this.scrollResponderGetScrollableNode()
     node.scrollLeft = x || 0
@@ -423,7 +425,7 @@ var ScrollResponderMixin = {
     this.preventNegativeScrollOffset = !!preventNegativeScrollOffset;
     UIManager.measureLayout(
       nodeHandle,
-      ReactDOM.findDOMNode(this.getInnerViewNode()),
+      findNodeHandle(this.getInnerViewNode()),
       this.scrollResponderTextInputFocusError,
       this.scrollResponderInputMeasureAndScrollToKeyboard
     );

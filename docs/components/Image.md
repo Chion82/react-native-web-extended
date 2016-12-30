@@ -46,7 +46,7 @@ Invoked when load either succeeds or fails,
 
 Invoked on load start.
 
-**resizeMode**: oneOf('center', 'contain', 'cover', 'none', 'repeat', 'stretch') = 'stretch'
+**resizeMode**: oneOf('center', 'contain', 'cover', 'none', 'repeat', 'stretch') = 'cover'
 
 Determines how to resize the image when the frame doesn't match the raw image
 dimensions.
@@ -74,6 +74,23 @@ Example usage:
 ```
 <Image resizeMode={Image.resizeMode.contain} />
 ```
+
+## Methods
+
+static **getSize**(uri: string, success: (width, height) => {}, failure: function)
+
+Retrieve the width and height (in pixels) of an image prior to displaying it.
+This method can fail if the image cannot be found, or fails to download.
+
+(In order to retrieve the image dimensions, the image may first need to be
+loaded or downloaded, after which it will be cached. This means that in
+principle you could use this method to preload images, however it is not
+optimized for that purpose, and may in future be implemented in a way that does
+not fully load/download the image data.)
+
+static **prefetch**(url: string): Promise
+
+Prefetches a remote image for later use by downloading it.
 
 ## Examples
 

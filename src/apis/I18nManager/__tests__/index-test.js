@@ -1,46 +1,45 @@
-/* eslint-env mocha */
+/* eslint-env jasmine, jest */
 
-import assert from 'assert'
-import I18nManager from '..'
+import I18nManager from '..';
 
-suite('apis/I18nManager', () => {
-  suite('when RTL not enabled', () => {
-    setup(() => {
-      I18nManager.setPreferredLanguageRTL(false)
-    })
+describe('apis/I18nManager', () => {
+  describe('when RTL not enabled', () => {
+    beforeEach(() => {
+      I18nManager.setPreferredLanguageRTL(false);
+    });
 
     test('is "false" by default', () => {
-      assert.equal(I18nManager.isRTL, false)
-      assert.equal(document.documentElement.getAttribute('dir'), 'ltr')
-    })
+      expect(I18nManager.isRTL).toEqual(false);
+      expect(document.documentElement.getAttribute('dir')).toEqual('ltr');
+    });
 
     test('is "true" when forced', () => {
-      I18nManager.forceRTL(true)
-      assert.equal(I18nManager.isRTL, true)
-      assert.equal(document.documentElement.getAttribute('dir'), 'rtl')
-      I18nManager.forceRTL(false)
-    })
-  })
+      I18nManager.forceRTL(true);
+      expect(I18nManager.isRTL).toEqual(true);
+      expect(document.documentElement.getAttribute('dir')).toEqual('rtl');
+      I18nManager.forceRTL(false);
+    });
+  });
 
-  suite('when RTL is enabled', () => {
-    setup(() => {
-      I18nManager.setPreferredLanguageRTL(true)
-    })
+  describe('when RTL is enabled', () => {
+    beforeEach(() => {
+      I18nManager.setPreferredLanguageRTL(true);
+    });
 
-    teardown(() => {
-      I18nManager.setPreferredLanguageRTL(false)
-    })
+    afterEach(() => {
+      I18nManager.setPreferredLanguageRTL(false);
+    });
 
     test('is "true" by default', () => {
-      assert.equal(I18nManager.isRTL, true)
-      assert.equal(document.documentElement.getAttribute('dir'), 'rtl')
-    })
+      expect(I18nManager.isRTL).toEqual(true);
+      expect(document.documentElement.getAttribute('dir')).toEqual('rtl');
+    });
 
     test('is "false" when not allowed', () => {
-      I18nManager.allowRTL(false)
-      assert.equal(I18nManager.isRTL, false)
-      assert.equal(document.documentElement.getAttribute('dir'), 'ltr')
-      I18nManager.allowRTL(true)
-    })
-  })
-})
+      I18nManager.allowRTL(false);
+      expect(I18nManager.isRTL).toEqual(false);
+      expect(document.documentElement.getAttribute('dir')).toEqual('ltr');
+      I18nManager.allowRTL(true);
+    });
+  });
+});

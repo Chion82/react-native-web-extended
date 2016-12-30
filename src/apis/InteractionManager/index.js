@@ -5,14 +5,13 @@
  * @flow
  */
 
-import keyMirror from 'fbjs/lib/keyMirror'
-import invariant from 'fbjs/lib/invariant'
+import invariant from 'fbjs/lib/invariant';
 
 const InteractionManager = {
-  Events: keyMirror({
-    interactionStart: true,
-    interactionComplete: true
-  }),
+  Events: {
+    interactionStart: 'interactionStart',
+    interactionComplete: 'interactionComplete'
+  },
 
   /**
    * Schedule a function to run after all interactions have completed.
@@ -21,15 +20,15 @@ const InteractionManager = {
     invariant(
       typeof callback === 'function',
       'Must specify a function to schedule.'
-    )
-    callback()
+    );
+    callback();
   },
 
   /**
    * Notify manager that an interaction has started.
    */
   createInteractionHandle() {
-    return 1
+    return 1;
   },
 
   /**
@@ -39,10 +38,10 @@ const InteractionManager = {
     invariant(
       !!handle,
       'Must provide a handle to clear.'
-    )
+    );
   },
 
   addListener: () => {}
-}
+};
 
-module.exports = InteractionManager
+module.exports = InteractionManager;

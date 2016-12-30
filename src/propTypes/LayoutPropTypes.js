@@ -1,9 +1,9 @@
-import { PropTypes } from 'react'
+import { PropTypes } from 'react';
 
-const { number, oneOf, oneOfType, string } = PropTypes
-const numberOrString = oneOfType([ number, string ])
+const { number, oneOf, oneOfType, string } = PropTypes;
+const numberOrString = oneOfType([ number, string ]);
 
-const LayoutPropTypes = {
+const LayoutPropTypes = process.env.NODE_ENV !== 'production' ? {
   // box model
   borderWidth: numberOrString,
   borderBottomWidth: numberOrString,
@@ -36,7 +36,7 @@ const LayoutPropTypes = {
   alignItems: oneOf([ 'baseline', 'center', 'flex-end', 'flex-start', 'stretch' ]),
   alignSelf: oneOf([ 'auto', 'baseline', 'center', 'flex-end', 'flex-start', 'stretch' ]),
   flex: number,
-  flexBasis: string,
+  flexBasis: numberOrString,
   flexDirection: oneOf([ 'column', 'column-reverse', 'row', 'row-reverse' ]),
   flexGrow: number,
   flexShrink: number,
@@ -58,6 +58,6 @@ const LayoutPropTypes = {
   paddingLeft$noI18n: numberOrString,
   paddingRight$noI18n: numberOrString,
   right$noI18n: numberOrString
-}
+} : {};
 
-module.exports = LayoutPropTypes
+module.exports = LayoutPropTypes;

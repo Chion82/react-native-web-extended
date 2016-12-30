@@ -1,3 +1,2 @@
-import ReactDOM from 'react-dom'
-const findNodeHandle = ReactDOM.findDOMNode
-export default findNodeHandle
+import findNodeHandle from 'react-dom/lib/findDOMNode';
+export default findNodeHandle;

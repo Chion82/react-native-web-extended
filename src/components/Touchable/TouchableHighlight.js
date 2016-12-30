@@ -18,21 +18,22 @@ var ColorPropType = require('../../propTypes/ColorPropType');
 var NativeMethodsMixin = require('../../modules/NativeMethodsMixin');
 var React = require('react');
 var StyleSheet = require('../../apis/StyleSheet');
+var StyleSheetPropType = require('../../propTypes/StyleSheetPropType');
 var TimerMixin = require('react-timer-mixin');
 var Touchable = require('./Touchable');
 var TouchableWithoutFeedback = require('./TouchableWithoutFeedback');
 var View = require('../View');
+var ViewStylePropTypes = require('../View/ViewStylePropTypes');
 
 var ensureComponentIsNative = require('./ensureComponentIsNative');
 var ensurePositiveDelayProps = require('./ensurePositiveDelayProps');
 var keyOf = require('fbjs/lib/keyOf');
-var merge = require('../../modules/merge');
 
 type Event = Object;
 
 var DEFAULT_PROPS = {
   accessibilityRole: 'button',
-  activeOpacity: 0.8,
+  activeOpacity: 0.85,
   underlayColor: 'black'
 };
 
@@ -54,13 +55,13 @@ var PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
  *     <TouchableHighlight onPress={this._onPressButton}>
  *       <Image
  *         style={styles.button}
- *         source={require('image!myButton')}
+ *         source={require('./myButton')}
  *       />
  *     </TouchableHighlight>
  *   );
  * },
  * ```
- * > **NOTE**: TouchableHighlight supports only one child
+ * > **NOTE**: TouchableHighlight must have one child (not zero or more than one)
  * >
  * > If you wish to have several child components, wrap them in a View.
  */
@@ -78,7 +79,7 @@ var TouchableHighlight = React.createClass({
      * active.
      */
     underlayColor: ColorPropType,
-    style: View.propTypes.style,
+    style: StyleSheetPropType(ViewStylePropTypes),
     /**
      * Called immediately after the underlay is shown
      */
@@ -115,7 +116,7 @@ var TouchableHighlight = React.createClass({
   },
 
   getInitialState: function() {
-    return merge(this.touchableGetInitialState(), this.computeSyntheticState(this.props))
+    return { ...this.touchableGetInitialState(), ...this.computeSyntheticState(this.props) }
   },
 
   componentDidMount: function() {

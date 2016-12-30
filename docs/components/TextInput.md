@@ -6,12 +6,10 @@ such as auto-complete, auto-focus, placeholder text, and event callbacks.
 Note: some props are exclusive to or excluded from `multiline`.
 
 Unsupported React Native props:
-`autoCapitalize`,
-`autoCorrect`,
 `onEndEditing`,
-`onSubmitEditing`,
 `clearButtonMode` (ios),
 `enablesReturnKeyAutomatically` (ios),
+`placeholderTextColor`,
 `returnKeyType` (ios),
 `selectionState` (ios),
 `underlineColorAndroid` (android)
@@ -20,14 +18,36 @@ Unsupported React Native props:
 
 [...View props](./View.md)
 
-(web) **autoComplete**: bool = false
+**autoCapitalize**: oneOf('characters', 'none', 'sentences', 'words') = 'sentences'
 
-Indicates whether the value of the control can be automatically completed by the browser.
+Automatically capitalize certain characters (only available in Chrome and iOS Safari).
+
+* `characters`: Automatically capitalize all characters.
+* `none`: Completely disables automatic capitalization
+* `sentences`: Automatically capitalize the first letter of sentences.
+* `words`: Automatically capitalize the first letter of words.
+
+(web) **autoComplete**: string
+
+Indicates whether the value of the control can be automatically completed by
+the browser. [Accepted values](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input).
+
+**autoCorrect**: bool = true
+
+Automatically correct spelling mistakes  (only available in iOS Safari).
 
 **autoFocus**: bool = false
 
-If true, focuses the input on `componentDidMount`. Only the first form element
+If `true`, focuses the input on `componentDidMount`. Only the first form element
 in a document with `autofocus` is focused.
+
+**blurOnSubmit**: bool
+
+If `true`, the text field will blur when submitted. The default value is `true`
+for single-line fields and `false` for multiline fields. Note, for multiline
+fields setting `blurOnSubmit` to `true` means that pressing return will blur
+the field and trigger the `onSubmitEditing` event instead of inserting a
+newline into the field.
 
 **clearTextOnFocus**: bool = false
 
@@ -87,28 +107,24 @@ as an argument to the callback handler.
 
 Callback that is called when the text input is focused.
 
-(web) **onSelectionChange**: function
+**onKeyPress**: function
 
-Callback that is called when the text input's selection changes. The following
-object is passed as an argument to the callback handler.
+Callback that is called when a key is pressed. Pressed key value is passed as
+an argument to the callback handler. Fires before `onChange` callbacks.
 
-```js
-{
-  selectionDirection,
-  selectionEnd,
-  selectionStart,
-  nativeEvent
-}
-```
+**onSelectionChange**: function
+
+Callback that is called when the text input's selection changes. This will be called with
+`{ nativeEvent: { selection: { start, end } } }`.
+
+**onSubmitEditing**: function
+
+Callback that is called when the keyboard's submit button is pressed.
 
 **placeholder**: string
 
 The string that will be rendered in an empty `TextInput` before text has been
 entered.
-
-**placeholderTextColor**: string
-
-The text color of the placeholder string.
 
 **secureTextEntry**: bool = false
 
@@ -116,6 +132,10 @@ If true, the text input obscures the text entered so that sensitive text like
 passwords stay secure.
 
 (Not available when `multiline` is `true`.)
+
+**selection**: { start: number, end: ?number }
+
+The start and end of the text input's selection. Set start and end to the same value to position the cursor.
 
 **selectTextOnFocus**: bool = false
 
@@ -151,6 +171,10 @@ Clear the text from the underlying DOM input.
 **focus()**
 
 Focus the underlying DOM input.
+
+**isFocused()**
+
+Returns `true` if the input is currently focused; `false` otherwise.
 
 ## Examples
 

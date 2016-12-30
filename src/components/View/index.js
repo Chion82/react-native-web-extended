@@ -1,13 +1,15 @@
-import applyLayout from '../../modules/applyLayout'
-import applyNativeMethods from '../../modules/applyNativeMethods'
-import BaseComponentPropTypes from '../../propTypes/BaseComponentPropTypes'
-import createDOMElement from '../../modules/createDOMElement'
-import EdgeInsetsPropType from '../../propTypes/EdgeInsetsPropType'
-import normalizeNativeEvent from '../../modules/normalizeNativeEvent'
-import { Component, PropTypes } from 'react'
-import StyleSheet from '../../apis/StyleSheet'
-import StyleSheetPropType from '../../propTypes/StyleSheetPropType'
-import ViewStylePropTypes from './ViewStylePropTypes'
+import '../../modules/injectResponderEventPlugin';
+
+import applyLayout from '../../modules/applyLayout';
+import applyNativeMethods from '../../modules/applyNativeMethods';
+import BaseComponentPropTypes from '../../propTypes/BaseComponentPropTypes';
+import createDOMElement from '../../modules/createDOMElement';
+import EdgeInsetsPropType from '../../propTypes/EdgeInsetsPropType';
+import normalizeNativeEvent from '../../modules/normalizeNativeEvent';
+import StyleSheet from '../../apis/StyleSheet';
+import StyleSheetPropType from '../../propTypes/StyleSheetPropType';
+import ViewStylePropTypes from './ViewStylePropTypes';
+import { Component, PropTypes } from 'react';
 
 const eventHandlerNames = [
   'onClick',
@@ -30,10 +32,10 @@ const eventHandlerNames = [
   'onTouchMoveCapture',
   'onTouchStart',
   'onTouchStartCapture'
-]
+];
 
 class View extends Component {
-  static displayName = 'View'
+  static displayName = 'View';
 
   static propTypes = {
     ...BaseComponentPropTypes,
@@ -61,13 +63,12 @@ class View extends Component {
     onTouchMoveCapture: PropTypes.func,
     onTouchStart: PropTypes.func,
     onTouchStartCapture: PropTypes.func,
-    pointerEvents: PropTypes.oneOf(['auto', 'box-none', 'box-only', 'none']),
+    pointerEvents: PropTypes.oneOf([ 'auto', 'box-none', 'box-only', 'none' ]),
     style: StyleSheetPropType(ViewStylePropTypes)
   };
 
   static defaultProps = {
-    accessible: true,
-    style: {}
+    accessible: true
   };
 
   static childContextTypes = {
@@ -81,62 +82,66 @@ class View extends Component {
   getChildContext() {
     return {
       isInAButtonView: this.props.accessibilityRole === 'button'
-    }
+    };
   }
 
   render() {
     const {
-      collapsable, // eslint-disable-line
-      hitSlop, // eslint-disable-line
-      onLayout, // eslint-disable-line
       pointerEvents,
       style,
-      ...other
-    } = this.props
+      /* eslint-disable */
+      accessibilityComponentType,
+      accessibilityTraits,
+      collapsable,
+      hitSlop,
+      onAccessibilityTap,
+      onLayout,
+      onMagicTap,
+      removeClippedSubviews,
+      /* eslint-enable */
+      ...otherProps
+    } = this.props;
 
-    const flattenedStyle = StyleSheet.flatten(style)
-    const pointerEventsStyle = pointerEvents && { pointerEvents }
+    const flattenedStyle = StyleSheet.flatten(style);
+    const pointerEventsStyle = pointerEvents && { pointerEvents };
     // 'View' needs to set 'flexShrink:0' only when there is no 'flex' or 'flexShrink' style provided
-    const needsFlexReset = flattenedStyle.flex == null && flattenedStyle.flexShrink == null
+    const needsFlexReset = !flattenedStyle || (flattenedStyle.flex == null && flattenedStyle.flexShrink == null);
 
-    const normalizedEventHandlers = eventHandlerNames.reduce((handlerProps, handlerName) => {
-      const handler = this.props[handlerName]
+    const component = this.context.isInAButtonView ? 'span' : 'div';
+
+    eventHandlerNames.reduce((props, handlerName) => {
+      const handler = this.props[handlerName];
       if (typeof handler === 'function') {
-        handlerProps[handlerName] = this._normalizeEventForHandler(handler, handlerName)
+        props[handlerName] = this._normalizeEventForHandler(handler, handlerName);
       }
-      return handlerProps
-    }, {})
+      return props;
+    }, otherProps);
 
-    const component = this.context.isInAButtonView ? 'span' : 'div'
-    const props = {
-      ...other,
-      ...normalizedEventHandlers,
-      style: [
-        styles.initial,
-        style,
-        needsFlexReset && styles.flexReset,
-        pointerEventsStyle
-      ]
-    }
+    otherProps.style = [
+      styles.initial,
+      style,
+      needsFlexReset && styles.flexReset,
+      pointerEventsStyle
+    ];
 
-    return createDOMElement(component, props)
+    return createDOMElement(component, otherProps);
   }
 
   _normalizeEventForHandler(handler, handlerName) {
     // Browsers fire mouse events after touch events. This causes the
-    // ResponderEvents and their handlers to fire twice for Touchables.
+    // 'onResponderRelease' handler to be called twice for Touchables.
     // Auto-fix this issue by calling 'preventDefault' to cancel the mouse
     // events.
-    const shouldCancelEvent = handlerName.indexOf('onResponder') === 0
+    const shouldCancelEvent = handlerName === 'onResponderRelease';
 
     return (e) => {
-      e.nativeEvent = normalizeNativeEvent(e.nativeEvent)
-      const returnValue = handler(e)
+      e.nativeEvent = normalizeNativeEvent(e.nativeEvent);
+      const returnValue = handler(e);
       if (shouldCancelEvent && e.cancelable) {
-        e.preventDefault()
+        e.preventDefault();
       }
-      return returnValue
-    }
+      return returnValue;
+    };
   }
 }
 
@@ -168,6 +173,6 @@ const styles = StyleSheet.create({
   flexReset: {
     flexShrink: 0
   }
-})
+});
 
-module.exports = applyLayout(applyNativeMethods(View))
+module.exports = applyLayout(applyNativeMethods(View));

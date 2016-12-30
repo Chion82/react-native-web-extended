@@ -1,71 +1,64 @@
-/* eslint-env mocha */
+/* eslint-env jasmine, jest */
 
-import assert from 'assert'
-import { getDefaultStyleSheet } from '../css'
-import isPlainObject from 'lodash/isPlainObject'
-import StyleSheet from '..'
+import { getDefaultStyleSheet } from '../css';
+import StyleSheet from '..';
 
-suite('apis/StyleSheet', () => {
-  setup(() => {
-    StyleSheet._reset()
-  })
+const isPlainObject = (x) => {
+  const toString = Object.prototype.toString;
+  let proto;
+  /* eslint-disable */
+  return (
+    toString.call(x) === '[object Object]' &&
+    (proto = Object.getPrototypeOf(x), proto === null || proto === Object.getPrototypeOf({}))
+  );
+  /* eslint-enable */
+};
+
+describe('apis/StyleSheet', () => {
+  beforeEach(() => {
+    StyleSheet._reset();
+  });
 
   test('absoluteFill', () => {
-    assert(Number.isInteger(StyleSheet.absoluteFill) === true)
-  })
+    expect(Number.isInteger(StyleSheet.absoluteFill) === true).toBeTruthy();
+  });
 
   test('absoluteFillObject', () => {
-    assert.ok(isPlainObject(StyleSheet.absoluteFillObject) === true)
-  })
+    expect(isPlainObject(StyleSheet.absoluteFillObject) === true).toBeTruthy();
+  });
 
-  suite('create', () => {
+  describe('create', () => {
     test('replaces styles with numbers', () => {
-      const style = StyleSheet.create({ root: { opacity: 1 } })
-      assert(Number.isInteger(style.root) === true)
-    })
+      const style = StyleSheet.create({ root: { opacity: 1 } });
+      expect(Number.isInteger(style.root) === true).toBeTruthy();
+    });
 
     test('renders a style sheet in the browser', () => {
-      StyleSheet.create({ root: { color: 'red' } })
-      assert.equal(
-        document.getElementById('__react-native-style').textContent,
-        getDefaultStyleSheet()
-      )
-    })
-  })
+      StyleSheet.create({ root: { color: 'red' } });
+      expect(document.getElementById('react-native-style__').textContent).toEqual(getDefaultStyleSheet());
+    });
+  });
 
   test('flatten', () => {
-    assert(typeof StyleSheet.flatten === 'function')
-  })
+    expect(typeof StyleSheet.flatten === 'function').toBeTruthy();
+  });
 
   test('hairlineWidth', () => {
-    assert(Number.isInteger(StyleSheet.hairlineWidth) === true)
-  })
+    expect(Number.isInteger(StyleSheet.hairlineWidth) === true).toBeTruthy();
+  });
 
   test('render', () => {
-    assert.equal(
-      StyleSheet.render().props.dangerouslySetInnerHTML.__html,
-      getDefaultStyleSheet()
-    )
-  })
+    expect(StyleSheet.render().props.dangerouslySetInnerHTML.__html).toEqual(getDefaultStyleSheet());
+  });
 
   test('resolve', () => {
-    assert.deepEqual(
-      StyleSheet.resolve({
-        className: 'test',
-        style: {
-          display: 'flex',
-          opacity: 1,
-          pointerEvents: 'box-none'
-        }
-      }),
-      {
-        className: 'test __style_df __style_pebn',
-        style: {
-          display: null,
-          opacity: 1,
-          pointerEvents: null
-        }
+    expect(StyleSheet.resolve({
+      className: 'test',
+      style: {
+        display: 'flex',
+        opacity: 1,
+        pointerEvents: 'box-none'
       }
-    )
-  })
-})
+    })).toMatchSnapshot();
+  });
+});

@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const DIST_DIRECTORY = './dist'
 
@@ -7,6 +8,16 @@ module.exports = {
   entry: {
     main: DIST_DIRECTORY
   },
+  externals: [
+    {
+      react: {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react'
+      }
+    }
+  ],
   output: {
     filename: 'ReactNative.js',
     library: 'ReactNative',
@@ -14,12 +25,16 @@ module.exports = {
     path: DIST_DIRECTORY
   },
   plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false
+    }),
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     new webpack.optimize.DedupePlugin(),
     // https://github.com/animatedjs/animated/issues/40
     new webpack.NormalModuleReplacementPlugin(
       /es6-set/,
-      path.join(__dirname, 'src/modules/polyfills/Set.js')
+      path.join(__dirname, 'dist/modules/polyfills/Set.js')
     ),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({

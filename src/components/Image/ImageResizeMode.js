@@ -1,12 +1,10 @@
-import keyMirror from 'fbjs/lib/keyMirror'
+const ImageResizeMode = {
+  center: 'center',
+  contain: 'contain',
+  cover: 'cover',
+  none: 'none',
+  repeat: 'repeat',
+  stretch: 'stretch'
+};
 
-const ImageResizeMode = keyMirror({
-  center: null,
-  contain: null,
-  cover: null,
-  none: null,
-  repeat: null,
-  stretch: null
-})
-
-module.exports = ImageResizeMode
+module.exports = ImageResizeMode;

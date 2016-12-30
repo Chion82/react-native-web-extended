@@ -6,16 +6,19 @@
  * @flow
  */
 
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment'
-import invariant from 'fbjs/lib/invariant'
+import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
+import findIndex from 'array-find-index';
+import invariant from 'fbjs/lib/invariant';
 
 const connection = ExecutionEnvironment.canUseDOM && (
   window.navigator.connection ||
   window.navigator.mozConnection ||
   window.navigator.webkitConnection
-)
+);
 
-const eventTypes = [ 'change' ]
+const eventTypes = [ 'change' ];
+
+const connectionListeners = [];
 
 /**
  * Navigator online: https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine
@@ -23,63 +26,74 @@ const eventTypes = [ 'change' ]
  */
 const NetInfo = {
   addEventListener(type: string, handler: Function): { remove: () => void } {
-    invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type)
+    invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type);
     if (!connection) {
-      console.error('Network Connection API is not supported. Not listening for connection type changes.')
+      console.error('Network Connection API is not supported. Not listening for connection type changes.');
       return {
         remove: () => {}
-      }
+      };
     }
 
-    connection.addEventListener(type, handler)
+    connection.addEventListener(type, handler);
     return {
       remove: () => NetInfo.removeEventListener(type, handler)
-    }
+    };
   },
 
   removeEventListener(type: string, handler: Function): void {
-    invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type)
-    if (!connection) { return }
-    connection.removeEventListener(type, handler)
+    invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type);
+    if (!connection) { return; }
+    connection.removeEventListener(type, handler);
   },
 
   fetch(): Promise {
     return new Promise((resolve, reject) => {
       try {
-        resolve(connection.type)
+        resolve(connection.type);
       } catch (err) {
-        resolve('unknown')
+        resolve('unknown');
       }
-    })
+    });
   },
 
   isConnected: {
     addEventListener(type: string, handler: Function): { remove: () => void } {
-      invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type)
-      window.addEventListener('online', handler.bind(null, true), false)
-      window.addEventListener('offline', handler.bind(null, false), false)
+      invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type);
+      const onlineCallback = () => handler(true);
+      const offlineCallback = () => handler(false);
+      connectionListeners.push([ handler, onlineCallback, offlineCallback ]);
+
+      window.addEventListener('online', onlineCallback, false);
+      window.addEventListener('offline', offlineCallback, false);
 
       return {
         remove: () => NetInfo.isConnected.removeEventListener(type, handler)
-      }
+      };
     },
 
     removeEventListener(type: string, handler: Function): void {
-      invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type)
-      window.removeEventListener('online', handler.bind(null, true), false)
-      window.removeEventListener('offline', handler.bind(null, false), false)
+      invariant(eventTypes.indexOf(type) !== -1, 'Trying to subscribe to unknown event: "%s"', type);
+
+      const listenerIndex = findIndex(connectionListeners, (pair) => pair[0] === handler);
+      invariant(listenerIndex !== -1, 'Trying to remove NetInfo connection listener for unregistered handler');
+      const [ , onlineCallback, offlineCallback ] = connectionListeners[listenerIndex];
+
+      window.removeEventListener('online', onlineCallback, false);
+      window.removeEventListener('offline', offlineCallback, false);
+
+      connectionListeners.splice(listenerIndex, 1);
     },
 
     fetch(): Promise {
       return new Promise((resolve, reject) => {
         try {
-          resolve(window.navigator.onLine)
+          resolve(window.navigator.onLine);
         } catch (err) {
-          resolve(true)
+          resolve(true);
         }
-      })
+      });
     }
   }
-}
+};
 
-module.exports = NetInfo
+module.exports = NetInfo;

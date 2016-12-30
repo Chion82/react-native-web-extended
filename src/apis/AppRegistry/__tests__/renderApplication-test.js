@@ -1,16 +1,15 @@
-/* eslint-env mocha */
+/* eslint-env jasmine, jest */
 
-import assert from 'assert'
-import { prerenderApplication } from '../renderApplication'
-import React from 'react'
+import { getApplication } from '../renderApplication';
+import React from 'react';
 
-const component = () => <div />
+const component = () => <div />;
 
-suite('apis/AppRegistry/renderApplication', () => {
-  test('prerenderApplication', () => {
-    const { html, styleElement } = prerenderApplication(component, {})
+describe('apis/AppRegistry/renderApplication', () => {
+  test('getApplication', () => {
+    const { element, stylesheet } = getApplication(component, {});
 
-    assert.ok(html.indexOf('<div ') > -1)
-    assert.equal(styleElement.type, 'style')
-  })
-})
+    expect(element).toBeTruthy();
+    expect(stylesheet.type).toEqual('style');
+  });
+});

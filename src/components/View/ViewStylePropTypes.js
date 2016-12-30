@@ -1,21 +1,24 @@
-import { PropTypes } from 'react'
-import BorderPropTypes from '../../propTypes/BorderPropTypes'
-import ColorPropType from '../../propTypes/ColorPropType'
-import LayoutPropTypes from '../../propTypes/LayoutPropTypes'
-import TransformPropTypes from '../../propTypes/TransformPropTypes'
+import BorderPropTypes from '../../propTypes/BorderPropTypes';
+import ColorPropType from '../../propTypes/ColorPropType';
+import LayoutPropTypes from '../../propTypes/LayoutPropTypes';
+import { PropTypes } from 'react';
+import ShadowPropTypes from '../../propTypes/ShadowPropTypes';
+import TransformPropTypes from '../../propTypes/TransformPropTypes';
 
-const { number, oneOf, string } = PropTypes
-const autoOrHiddenOrVisible = oneOf([ 'auto', 'hidden', 'visible' ])
-const hiddenOrVisible = oneOf([ 'hidden', 'visible' ])
+const { number, oneOf, string } = PropTypes;
+const autoOrHiddenOrVisible = oneOf([ 'auto', 'hidden', 'visible' ]);
+const hiddenOrVisible = oneOf([ 'hidden', 'visible' ]);
 
-module.exports = {
+module.exports = process.env.NODE_ENV !== 'production' ? {
   ...BorderPropTypes,
   ...LayoutPropTypes,
+  ...ShadowPropTypes,
   ...TransformPropTypes,
   backfaceVisibility: hiddenOrVisible,
   backgroundColor: ColorPropType,
   opacity: number,
   overflow: autoOrHiddenOrVisible,
+  zIndex: number,
   /*
    * @platform web
    */
@@ -31,9 +34,11 @@ module.exports = {
   outline: string,
   overflowX: autoOrHiddenOrVisible,
   overflowY: autoOrHiddenOrVisible,
-  transition: string,
+  transitionDelay: string,
+  transitionDuration: string,
+  transitionProperty: string,
+  transitionTimingFunction: string,
   userSelect: string,
   visibility: hiddenOrVisible,
-  zIndex: number,
-  display: string
-}
+  WebkitOverflowScrolling: oneOf([ 'auto', 'touch' ])
+} : {};

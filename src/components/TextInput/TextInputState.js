@@ -6,7 +6,7 @@
  * @flow
  */
 
-import UIManager from '../../apis/UIManager'
+import UIManager from '../../apis/UIManager';
 
 /**
  * This class is responsible for coordinating the "focused"
@@ -24,7 +24,10 @@ const TextInputState = {
    * If no text field is focused it returns null
    */
   currentlyFocusedField(): ?Object {
-    return this._currentlyFocusedNode
+    if (document.activeElement !== this._currentlyFocusedNode) {
+      this._currentlyFocusedNode = null;
+    }
+    return this._currentlyFocusedNode;
   },
 
   /**
@@ -33,9 +36,9 @@ const TextInputState = {
    * noop if the text field was already focused
    */
   focusTextInput(textFieldNode: ?Object) {
-    if (this._currentlyFocusedNode !== textFieldNode && textFieldNode !== null) {
-      this._currentlyFocusedNode = textFieldNode
-      UIManager.focus(textFieldNode)
+    if (document.activeElement !== textFieldNode && textFieldNode !== null) {
+      this._currentlyFocusedNode = textFieldNode;
+      UIManager.focus(textFieldNode);
     }
   },
 
@@ -45,11 +48,11 @@ const TextInputState = {
    * noop if it wasn't focused
    */
   blurTextInput(textFieldNode: ?Object) {
-    if (this._currentlyFocusedNode === textFieldNode && textFieldNode !== null) {
-      this._currentlyFocusedNode = null
-      UIManager.blur(textFieldNode)
+    if (document.activeElement === textFieldNode && textFieldNode !== null) {
+      this._currentlyFocusedNode = null;
+      UIManager.blur(textFieldNode);
     }
   }
-}
+};
 
-module.exports = TextInputState
+module.exports = TextInputState;

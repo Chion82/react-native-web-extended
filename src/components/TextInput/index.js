@@ -1,28 +1,69 @@
-import applyNativeMethods from '../../modules/applyNativeMethods'
-import createDOMElement from '../../modules/createDOMElement'
-import omit from 'lodash/omit'
-import pick from 'lodash/pick'
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import StyleSheet from '../../apis/StyleSheet'
-import Text from '../Text'
-import TextareaAutosize from 'react-textarea-autosize'
-import TextInputState from './TextInputState'
-import UIManager from '../../apis/UIManager'
-import View from '../View'
-import ViewStylePropTypes from '../View/ViewStylePropTypes'
+import applyLayout from '../../modules/applyLayout';
+import applyNativeMethods from '../../modules/applyNativeMethods';
+import createDOMElement from '../../modules/createDOMElement';
+import findNodeHandle from '../../modules/findNodeHandle';
+import StyleSheet from '../../apis/StyleSheet';
+import Text from '../Text';
+import TextareaAutosize from 'react-textarea-autosize';
+import TextInputState from './TextInputState';
+import UIManager from '../../apis/UIManager';
+import View from '../View';
+import { Component, PropTypes } from 'react';
 
-const viewStyleProps = Object.keys(ViewStylePropTypes)
+const emptyObject = {};
+
+/**
+ * React Native events differ from W3C events.
+ */
+const normalizeEventHandler = (handler) => (e) => {
+  if (handler) {
+    e.nativeEvent.text = e.target.value;
+    return handler(e);
+  }
+};
+
+/**
+ * Determines whether a 'selection' prop differs from a node's existing
+ * selection state.
+ */
+const isSelectionStale = (node, selection) => {
+  if (node && selection) {
+    const { selectionEnd, selectionStart } = node;
+    const { start, end } = selection;
+    return start !== selectionStart || end !== selectionEnd;
+  }
+  return false;
+};
+
+/**
+ * Certain input types do no support 'selectSelectionRange' and will throw an
+ * error.
+ */
+const setSelection = (node, selection) => {
+  try {
+    if (isSelectionStale(node, selection)) {
+      const { start, end } = selection;
+      node.setSelectionRange(start, end || start);
+    }
+  } catch (e) {}
+};
 
 class TextInput extends Component {
+  static displayName = 'TextInput';
+
   static propTypes = {
     ...View.propTypes,
-    autoComplete: PropTypes.bool,
+    autoCapitalize: PropTypes.oneOf([ 'characters', 'none', 'sentences', 'words' ]),
+    autoComplete: PropTypes.string,
+    autoCorrect: PropTypes.bool,
     autoFocus: PropTypes.bool,
+    blurOnSubmit: PropTypes.bool,
     clearTextOnFocus: PropTypes.bool,
     defaultValue: PropTypes.string,
     editable: PropTypes.bool,
-    keyboardType: PropTypes.oneOf(['default', 'email-address', 'numeric', 'phone-pad', 'search', 'url', 'web-search']),
+    keyboardType: PropTypes.oneOf([
+      'default', 'email-address', 'number-pad', 'numeric', 'phone-pad', 'search', 'url', 'web-search'
+    ]),
     maxLength: PropTypes.number,
     maxNumberOfLines: PropTypes.number,
     multiline: PropTypes.bool,
@@ -31,242 +72,210 @@ class TextInput extends Component {
     onChange: PropTypes.func,
     onChangeText: PropTypes.func,
     onFocus: PropTypes.func,
+    onKeyPress: PropTypes.func,
     onSelectionChange: PropTypes.func,
+    onSubmitEditing: PropTypes.func,
     placeholder: PropTypes.string,
     placeholderTextColor: PropTypes.string,
     secureTextEntry: PropTypes.bool,
     selectTextOnFocus: PropTypes.bool,
+    selection: PropTypes.shape({
+      start: PropTypes.number.isRequired,
+      end: PropTypes.number
+    }),
     style: Text.propTypes.style,
-    testID: Text.propTypes.testID,
     value: PropTypes.string
   };
 
   static defaultProps = {
+    autoCapitalize: 'sentences',
+    autoComplete: 'on',
+    autoCorrect: true,
     editable: true,
     keyboardType: 'default',
     multiline: false,
     numberOfLines: 2,
     secureTextEntry: false,
-    style: {}
+    style: emptyObject
   };
 
-  constructor(props, context) {
-    super(props, context)
-    this.state = { showPlaceholder: !props.value && !props.defaultValue }
-  }
-
   blur() {
-    TextInputState.blurTextInput(ReactDOM.findDOMNode(this.refs.input))
+    TextInputState.blurTextInput(this._node);
   }
 
   clear() {
-    this.setNativeProps({ text: '' })
+    this._node.value = '';
   }
 
   focus() {
-    TextInputState.focusTextInput(ReactDOM.findDOMNode(this.refs.input))
+    TextInputState.focusTextInput(this._node);
+  }
+
+  isFocused() {
+    return TextInputState.currentlyFocusedField() === this._node;
   }
 
   setNativeProps(props) {
-    UIManager.updateView(this.refs.input, props, this)
+    UIManager.updateView(this._node, props, this);
+  }
+
+  componentDidMount() {
+    setSelection(this._node, this.props.selection);
+  }
+
+  componentDidUpdate() {
+    setSelection(this._node, this.props.selection);
   }
 
   render() {
     const {
-      accessibilityLabel, // eslint-disable-line
-      autoComplete,
-      autoFocus,
-      defaultValue,
+      autoCorrect,
       editable,
       keyboardType,
-      maxLength,
       maxNumberOfLines,
       multiline,
       numberOfLines,
-      onLayout,
-      onSelectionChange,
-      placeholder,
-      placeholderTextColor,
       secureTextEntry,
       style,
-      testID,
-      value
-    } = this.props
+      /* eslint-disable */
+      blurOnSubmit,
+      clearTextOnFocus,
+      dataDetectorTypes,
+      enablesReturnKeyAutomatically,
+      keyboardAppearance,
+      onChangeText,
+      onContentSizeChange,
+      onEndEditing,
+      onLayout,
+      onSelectionChange,
+      onSubmitEditing,
+      placeholderTextColor,
+      returnKeyType,
+      selection,
+      selectionColor,
+      selectTextOnFocus,
+      /* eslint-enable */
+      ...otherProps
+    } = this.props;
 
-    let type
+    let type;
 
     switch (keyboardType) {
       case 'email-address':
-        type = 'email'
-        break
+        type = 'email';
+        break;
+      case 'number-pad':
       case 'numeric':
-        type = 'number'
-        break
+        type = 'number';
+        break;
       case 'phone-pad':
-        type = 'tel'
-        break
+        type = 'tel';
+        break;
       case 'search':
       case 'web-search':
-        type = 'search'
-        break
+        type = 'search';
+        break;
       case 'url':
-        type = 'url'
-        break
+        type = 'url';
+        break;
+      default:
+        type = 'text';
     }
 
     if (secureTextEntry) {
-      type = 'password'
+      type = 'password';
     }
 
-    // In order to support 'Text' styles on 'TextInput', we split the 'Text'
-    // and 'View' styles and apply them to the 'Text' and 'View' components
-    // used in the implementation
-    const flattenedStyle = StyleSheet.flatten(style)
-    const rootStyles = pick(flattenedStyle, viewStyleProps)
-    const textStyles = omit(flattenedStyle, viewStyleProps)
+    const component = multiline ? TextareaAutosize : 'input';
 
-    const propsCommon = {
-      autoComplete: autoComplete && 'on',
-      autoFocus,
-      defaultValue,
-      maxLength,
-      onBlur: this._handleBlur,
-      onChange: this._handleChange,
-      onFocus: this._handleFocus,
-      onSelect: onSelectionChange && this._handleSelectionChange,
+    Object.assign(otherProps, {
+      autoCorrect: autoCorrect ? 'on' : 'off',
+      dir: 'auto',
+      onBlur: normalizeEventHandler(this._handleBlur),
+      onChange: normalizeEventHandler(this._handleChange),
+      onFocus: normalizeEventHandler(this._handleFocus),
+      onKeyPress: normalizeEventHandler(this._handleKeyPress),
+      onSelect: normalizeEventHandler(this._handleSelectionChange),
       readOnly: !editable,
-      ref: 'input',
-      style: [ styles.input, textStyles, { outline: style.outline } ],
-      value
+      ref: this._setNode,
+      style: [
+        styles.initial,
+        style
+      ]
+    });
+
+    if (multiline) {
+      otherProps.maxRows = maxNumberOfLines || numberOfLines;
+      otherProps.minRows = numberOfLines;
+    } else {
+      otherProps.type = type;
     }
 
-    const propsMultiline = {
-      ...propsCommon,
-      maxRows: maxNumberOfLines || numberOfLines,
-      minRows: numberOfLines
-    }
-
-    const propsSingleline = {
-      ...propsCommon,
-      type
-    }
-
-    const component = multiline ? TextareaAutosize : 'input'
-    const props = multiline ? propsMultiline : propsSingleline
-
-    const optionalPlaceholder = placeholder && this.state.showPlaceholder && (
-      <View pointerEvents='none' style={styles.placeholder}>
-        <Text
-          children={placeholder}
-          style={[
-            styles.placeholderText,
-            textStyles,
-            placeholderTextColor && { color: placeholderTextColor }
-          ]}
-        />
-      </View>
-    )
-
-    return (
-      <View
-        accessibilityLabel={accessibilityLabel}
-        onClick={this._handleClick}
-        onLayout={onLayout}
-        style={[ styles.initial, rootStyles ]}
-        testID={testID}
-      >
-        <View style={styles.wrapper}>
-          {createDOMElement(component, props)}
-          {optionalPlaceholder}
-        </View>
-      </View>
-    )
+    return createDOMElement(component, otherProps);
   }
 
   _handleBlur = (e) => {
-    const { onBlur } = this.props
-    const text = e.target.value
-    this.setState({ showPlaceholder: text === '' })
-    this.blur()
-    if (onBlur) onBlur(e)
+    const { onBlur } = this.props;
+    if (onBlur) { onBlur(e); }
   }
 
   _handleChange = (e) => {
-    const { onChange, onChangeText } = this.props
-    const text = e.target.value
-    this.setState({ showPlaceholder: text === '' })
-    if (onChange) onChange(e)
-    if (onChangeText) onChangeText(text)
-    if (!this.refs.input) {
-      // calling `this.props.onChange` or `this.props.onChangeText`
-      // may clean up the input itself. Exits here.
-      return
-    }
-  }
-
-  _handleClick = (e) => {
-    this.focus()
+    const { onChange, onChangeText } = this.props;
+    const { text } = e.nativeEvent;
+    if (onChange) { onChange(e); }
+    if (onChangeText) { onChangeText(text); }
   }
 
   _handleFocus = (e) => {
-    const { clearTextOnFocus, onFocus, selectTextOnFocus } = this.props
-    const node = ReactDOM.findDOMNode(this.refs.input)
-    const text = e.target.value
-    if (onFocus) onFocus(e)
-    if (clearTextOnFocus) this.clear()
-    if (selectTextOnFocus) node.select()
-    this.setState({ showPlaceholder: text === '' })
+    const { clearTextOnFocus, onFocus, selectTextOnFocus } = this.props;
+    const node = this._node;
+    if (onFocus) { onFocus(e); }
+    if (clearTextOnFocus) { this.clear(); }
+    if (selectTextOnFocus) { node && node.select(); }
+  }
+
+  _handleKeyPress = (e) => {
+    const { blurOnSubmit, multiline, onKeyPress, onSubmitEditing } = this.props;
+    const blurOnSubmitDefault = !multiline;
+    const shouldBlurOnSubmit = blurOnSubmit == null ? blurOnSubmitDefault : blurOnSubmit;
+    if (onKeyPress) { onKeyPress(e); }
+    if (!e.isDefaultPrevented() && e.which === 13) {
+      if (onSubmitEditing) { onSubmitEditing(e); }
+      if (shouldBlurOnSubmit) { this.blur(); }
+    }
   }
 
   _handleSelectionChange = (e) => {
-    const { onSelectionChange } = this.props
-    try {
-      const { selectionDirection, selectionEnd, selectionStart } = e.target
-      const event = {
-        selectionDirection,
-        selectionEnd,
-        selectionStart,
-        nativeEvent: e.nativeEvent
-      }
-      if (onSelectionChange) onSelectionChange(event)
-    } catch (e) {}
+    const { onSelectionChange, selection = emptyObject } = this.props;
+    if (onSelectionChange) {
+      try {
+        const node = e.target;
+        if (isSelectionStale(node, selection)) {
+          const { selectionStart, selectionEnd } = node;
+          e.nativeEvent.selection = { start: selectionStart, end: selectionEnd };
+          onSelectionChange(e);
+        }
+      } catch (e) {}
+    }
+  }
+
+  _setNode = (component) => {
+    this._node = findNodeHandle(component);
   }
 }
 
-applyNativeMethods(TextInput)
-
 const styles = StyleSheet.create({
   initial: {
-    borderColor: 'black'
-  },
-  wrapper: {
-    flex: 1
-  },
-  input: {
     appearance: 'none',
     backgroundColor: 'transparent',
+    borderColor: 'black',
+    borderRadius: 0,
     borderWidth: 0,
     boxSizing: 'border-box',
     color: 'inherit',
-    flex: 1,
     font: 'inherit',
-    minHeight: '100%', // center small inputs (fix #139)
-    padding: 0,
-    zIndex: 1
-  },
-  placeholder: {
-    bottom: 0,
-    justifyContent: 'center',
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0
-  },
-  placeholderText: {
-    color: 'darkgray',
-    overflow: 'hidden',
-    whiteSpace: 'pre'
+    padding: 0
   }
-})
+});
 
-module.exports = TextInput
+module.exports = applyLayout(applyNativeMethods(TextInput));

@@ -1,44 +1,43 @@
-import Animated from '../../apis/Animated'
-import applyNativeMethods from '../../modules/applyNativeMethods'
-import Easing from 'animated/lib/Easing'
-import React, { Component, PropTypes } from 'react'
-import StyleSheet from '../../apis/StyleSheet'
-import View from '../View'
+import Animated from '../../apis/Animated';
+import applyNativeMethods from '../../modules/applyNativeMethods';
+import Easing from 'animated/lib/Easing';
+import StyleSheet from '../../apis/StyleSheet';
+import View from '../View';
+import React, { Component, PropTypes } from 'react';
 
-const GRAY = '#999999'
-const opacityInterpolation = { inputRange: [ 0, 1 ], outputRange: [ 0.5, 1 ] }
-const scaleInterpolation = { inputRange: [ 0, 1 ], outputRange: [ 0.95, 1 ] }
+const rotationInterpolation = { inputRange: [ 0, 1 ], outputRange: [ '0deg', '360deg' ] };
 
 class ActivityIndicator extends Component {
+  static displayName = 'ActivityIndicator';
+
   static propTypes = {
+    ...View.propTypes,
     animating: PropTypes.bool,
     color: PropTypes.string,
     hidesWhenStopped: PropTypes.bool,
-    size: PropTypes.oneOf([ 'small', 'large' ]),
-    style: View.propTypes.style
+    size: PropTypes.oneOfType([ PropTypes.oneOf([ 'small', 'large' ]), PropTypes.number ])
   };
 
   static defaultProps = {
     animating: true,
-    color: GRAY,
+    color: '#1976D2',
     hidesWhenStopped: true,
-    size: 'small',
-    style: {}
+    size: 'small'
   };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      animation: new Animated.Value(1)
-    }
+      animation: new Animated.Value(0)
+    };
   }
 
   componentDidMount() {
-    this._manageAnimation()
+    this._manageAnimation();
   }
 
   componentDidUpdate() {
-    this._manageAnimation()
+    this._manageAnimation();
   }
 
   render() {
@@ -49,53 +48,85 @@ class ActivityIndicator extends Component {
       size,
       style,
       ...other
-    } = this.props
+    } = this.props;
 
-    const { animation } = this.state
+    const { animation } = this.state;
+
+    const svg = (
+      <svg height='100%' viewBox='0 0 32 32' width='100%'>
+        <circle
+          cx='16'
+          cy='16'
+          fill='none'
+          r='14'
+          strokeWidth='4'
+          style={{
+            stroke: color,
+            opacity: 0.2
+          }}
+        />
+        <circle
+          cx='16'
+          cy='16'
+          fill='none'
+          r='14'
+          strokeWidth='4'
+          style={{
+            stroke: color,
+            strokeDasharray: 80,
+            strokeDashoffset: 60
+          }}
+        />
+      </svg>
+    );
 
     return (
-      <View {...other} style={[ styles.container, style ]}>
+      <View {...other}
+        accessibilityRole='progressbar'
+        aria-valuemax='1'
+        aria-valuemin='0'
+        style={[
+          styles.container,
+          style,
+          size && { height: size, width: size }
+        ]}
+      >
         <Animated.View
+          children={svg}
           style={[
             indicatorStyles[size],
             hidesWhenStopped && !animating && styles.hidesWhenStopped,
             {
-              borderColor: color,
-              opacity: animation.interpolate(opacityInterpolation),
-              transform: [ { scale: animation.interpolate(scaleInterpolation) } ]
+              transform: [
+                { rotate: animation.interpolate(rotationInterpolation) }
+              ]
             }
           ]}
         />
       </View>
-    )
+    );
   }
 
   _manageAnimation() {
-    const { animation } = this.state
+    const { animation } = this.state;
 
     const cycleAnimation = () => {
-      Animated.sequence([
-        Animated.timing(animation, {
-          duration: 600,
-          easing: Easing.inOut(Easing.ease),
-          toValue: 0
-        }),
-        Animated.timing(animation, {
-          duration: 600,
-          easing: Easing.inOut(Easing.ease),
-          toValue: 1
-        })
-      ]).start((event) => {
+      animation.setValue(0);
+      Animated.timing(animation, {
+        duration: 750,
+        easing: Easing.inOut(Easing.linear),
+        toValue: 1
+      }).start((event) => {
         if (event.finished) {
-          cycleAnimation()
+          cycleAnimation();
         }
-      })
-    }
+      });
+    };
 
     if (this.props.animating) {
-      cycleAnimation()
+      cycleAnimation();
     } else {
-      animation.stopAnimation()
+      animation.stopAnimation();
     }
   }
 }
@@ -108,21 +139,17 @@ const styles = StyleSheet.create({
   hidesWhenStopped: {
     visibility: 'hidden'
   }
-})
+});
 
 const indicatorStyles = StyleSheet.create({
   small: {
-    borderRadius: 100,
-    borderWidth: 3,
     width: 20,
     height: 20
   },
   large: {
-    borderRadius: 100,
-    borderWidth: 4,
     width: 36,
     height: 36
   }
-})
+});
 
-module.exports = applyNativeMethods(ActivityIndicator)
+module.exports = applyNativeMethods(ActivityIndicator);

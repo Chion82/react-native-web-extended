@@ -19,6 +19,12 @@ Fork, then clone the repo:
 git clone https://github.com/your-username/react-native-web.git
 ```
 
+Install dependencies (requires [yarn](https://yarnpkg.com/en/docs/install):
+
+```
+yarn
+```
+
 Run the examples:
 
 ```
@@ -51,7 +57,7 @@ To continuously watch and run tests, run the following:
 npm run test:watch
 ```
 
-To perform linting, run the following:
+To perform only linting, run the following:
 
 ```
 npm run lint

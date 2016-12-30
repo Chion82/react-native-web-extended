@@ -1,33 +1,47 @@
 /* global window */
-import applyNativeMethods from '../../modules/applyNativeMethods'
-import BaseComponentPropTypes from '../../propTypes/BaseComponentPropTypes'
-import createDOMElement from '../../modules/createDOMElement'
-import ImageResizeMode from './ImageResizeMode'
-import ImageStylePropTypes from './ImageStylePropTypes'
-import resolveAssetSource from './resolveAssetSource'
-import React, { Component, PropTypes } from 'react'
-import StyleSheet from '../../apis/StyleSheet'
-import StyleSheetPropType from '../../propTypes/StyleSheetPropType'
-import View from '../View'
+import applyNativeMethods from '../../modules/applyNativeMethods';
+import ImageResizeMode from './ImageResizeMode';
+import ImageLoader from '../../modules/ImageLoader';
+import ImageStylePropTypes from './ImageStylePropTypes';
+import requestAnimationFrame from 'fbjs/lib/requestAnimationFrame';
+import StyleSheet from '../../apis/StyleSheet';
+import StyleSheetPropType from '../../propTypes/StyleSheetPropType';
+import View from '../View';
+import React, { Component, PropTypes } from 'react';
 
-const STATUS_ERRORED = 'ERRORED'
-const STATUS_LOADED = 'LOADED'
-const STATUS_LOADING = 'LOADING'
-const STATUS_PENDING = 'PENDING'
-const STATUS_IDLE = 'IDLE'
+const emptyObject = {};
+
+const STATUS_ERRORED = 'ERRORED';
+const STATUS_LOADED = 'LOADED';
+const STATUS_LOADING = 'LOADING';
+const STATUS_PENDING = 'PENDING';
+const STATUS_IDLE = 'IDLE';
 
 const ImageSourcePropType = PropTypes.oneOfType([
   PropTypes.shape({
-    uri: PropTypes.string.isRequired
+    height: PropTypes.number,
+    uri: PropTypes.string.isRequired,
+    width: PropTypes.number
   }),
   PropTypes.string
-])
+]);
+
+const resolveAssetDimensions = (source) => {
+  if (typeof source === 'object') {
+    const { height, width } = source;
+    return { height, width };
+  }
+};
+
+const resolveAssetSource = (source) => {
+  return ((typeof source === 'object') ? source.uri : source) || null;
+};
 
 class Image extends Component {
-  static displayName = 'Image'
+  static displayName = 'Image';
 
   static propTypes = {
-    ...BaseComponentPropTypes,
+    ...View.propTypes,
     children: PropTypes.any,
     defaultSource: ImageSourcePropType,
     onError: PropTypes.func,
@@ -35,50 +49,60 @@ class Image extends Component {
     onLoad: PropTypes.func,
     onLoadEnd: PropTypes.func,
     onLoadStart: PropTypes.func,
-    resizeMode: PropTypes.oneOf(['center', 'contain', 'cover', 'none', 'repeat', 'stretch']),
+    resizeMode: PropTypes.oneOf(Object.keys(ImageResizeMode)),
     source: ImageSourcePropType,
     style: StyleSheetPropType(ImageStylePropTypes)
   };
 
   static defaultProps = {
-    accessible: true,
-    style: {}
+    style: emptyObject
   };
+
+  static getSize(uri, success, failure) {
+    ImageLoader.getSize(uri, success, failure);
+  }
+
+  static prefetch(uri) {
+    return ImageLoader.prefetch(uri);
+  }
 
   static resizeMode = ImageResizeMode;
 
   constructor(props, context) {
-    super(props, context)
-    const uri = resolveAssetSource(props.source)
-    this._imageState = uri ? STATUS_PENDING : STATUS_IDLE
-    this.state = { isLoaded: false }
+    super(props, context);
+    this.state = { shouldDisplaySource: false };
+    const uri = resolveAssetSource(props.source);
+    this._imageState = uri ? STATUS_PENDING : STATUS_IDLE;
+    this._isMounted = false;
   }
 
   componentDidMount() {
     if (this._imageState === STATUS_PENDING) {
-      this._createImageLoader()
+      this._createImageLoader();
     }
+    this._isMounted = true;
   }
 
   componentDidUpdate() {
-    if (this._imageState === STATUS_PENDING && !this.image) {
-      this._createImageLoader()
+    if (this._imageState === STATUS_PENDING) {
+      this._createImageLoader();
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextUri = resolveAssetSource(nextProps.source)
+    const nextUri = resolveAssetSource(nextProps.source);
     if (resolveAssetSource(this.props.source) !== nextUri) {
-      this._updateImageState(nextUri ? STATUS_PENDING : STATUS_IDLE)
+      this._updateImageState(nextUri ? STATUS_PENDING : STATUS_IDLE);
     }
   }
 
   componentWillUnmount() {
-    this._destroyImageLoader()
+    this._destroyImageLoader();
+    this._isMounted = false;
   }
 
   render() {
-    const { isLoaded } = this.state
+    const { shouldDisplaySource } = this.state;
     const {
       accessibilityLabel,
       accessible,
@@ -86,132 +110,116 @@ class Image extends Component {
       defaultSource,
       onLayout,
       source,
-      testID
-    } = this.props
+      testID,
+      /* eslint-disable */
+      onError,
+      onLoad,
+      onLoadEnd,
+      onLoadStart,
+      resizeMode,
+      /* eslint-enable */
+      ...other
+    } = this.props;
 
-    const displayImage = resolveAssetSource(!isLoaded ? defaultSource : source)
-    const backgroundImage = displayImage ? `url("${displayImage}")` : null
-    let style = StyleSheet.flatten(this.props.style)
+    const displayImage = resolveAssetSource(shouldDisplaySource ? source : defaultSource);
+    const imageSizeStyle = resolveAssetDimensions(shouldDisplaySource ? source : defaultSource);
+    const backgroundImage = displayImage ? `url("${displayImage}")` : null;
+    const originalStyle = StyleSheet.flatten(this.props.style);
+    const finalResizeMode = resizeMode || originalStyle.resizeMode || ImageResizeMode.cover;
 
-    const resizeMode = this.props.resizeMode || style.resizeMode || ImageResizeMode.cover
-    // remove 'resizeMode' style, as it is not supported by View (N.B. styles are frozen in dev)
-    style = process.env.NODE_ENV !== 'production' ? { ...style } : style
-    delete style.resizeMode
+    const style = StyleSheet.flatten([
+      styles.initial,
+      imageSizeStyle,
+      originalStyle,
+      backgroundImage && { backgroundImage },
+      resizeModeStyles[finalResizeMode]
+    ]);
+    // View doesn't support 'resizeMode' as a style
+    delete style.resizeMode;
 
-    /**
-     * Image is a non-stretching View. The image is displayed as a background
-     * image to support `resizeMode`. The HTML image is hidden but used to
-     * provide the correct responsive image dimensions, and to support the
-     * image context menu. Child content is rendered into an element absolutely
-     * positioned over the image.
-     */
     return (
       <View
+        {...other}
         accessibilityLabel={accessibilityLabel}
         accessibilityRole='img'
         accessible={accessible}
+        children={children}
         onLayout={onLayout}
-        ref='root'
-        style={[
-          styles.initial,
-          style,
-          backgroundImage && { backgroundImage },
-          resizeModeStyles[resizeMode]
-        ]}
+        style={style}
         testID={testID}
-      >
-        {createDOMElement('img', { src: displayImage, style: styles.img })}
-        {children ? (
-          <View children={children} pointerEvents='box-none' style={styles.children} />
-        ) : null}
-      </View>
-    )
+      />
+    );
   }
 
   _createImageLoader() {
-    const uri = resolveAssetSource(this.props.source)
-
-    this._destroyImageLoader()
-    this.image = new window.Image()
-    this.image.onerror = this._onError
-    this.image.onload = this._onLoad
-    this.image.src = uri
-    this._onLoadStart()
+    this._destroyImageLoader();
+    const uri = resolveAssetSource(this.props.source);
+    this._imageRequestId = ImageLoader.load(uri, this._onLoad, this._onError);
+    this._onLoadStart();
   }
 
   _destroyImageLoader() {
-    if (this.image) {
-      this.image.onerror = null
-      this.image.onload = null
-      this.image = null
+    if (this._imageRequestId) {
+      ImageLoader.abort(this._imageRequestId);
+      this._imageRequestId = null;
     }
   }
 
-  _onError = (e) => {
-    const { onError } = this.props
-    const event = { nativeEvent: e }
-
-    this._destroyImageLoader()
-    this._updateImageState(STATUS_ERRORED)
-    this._onLoadEnd()
-    if (onError) onError(event)
+  _onError = () => {
+    const { onError, source } = this.props;
+    this._updateImageState(STATUS_ERRORED);
+    if (onError) {
+      onError({
+        nativeEvent: {
+          error: `Failed to load resource ${resolveAssetSource(source)} (404)`
+        }
+      });
+    }
+    this._onLoadEnd();
   }
 
   _onLoad = (e) => {
-    const { onLoad } = this.props
-    const event = { nativeEvent: e }
+    const { onLoad } = this.props;
+    const event = { nativeEvent: e };
 
-    this._destroyImageLoader()
-    this._updateImageState(STATUS_LOADED)
-    if (onLoad) onLoad(event)
-    this._onLoadEnd()
+    this._updateImageState(STATUS_LOADED);
+    if (onLoad) { onLoad(event); }
+    this._onLoadEnd();
   }
 
   _onLoadEnd() {
-    const { onLoadEnd } = this.props
-    if (onLoadEnd) onLoadEnd()
+    const { onLoadEnd } = this.props;
+    if (onLoadEnd) { onLoadEnd(); }
   }
 
   _onLoadStart() {
-    const { onLoadStart } = this.props
-    this._updateImageState(STATUS_LOADING)
-    if (onLoadStart) onLoadStart()
+    const { onLoadStart } = this.props;
+    this._updateImageState(STATUS_LOADING);
+    if (onLoadStart) { onLoadStart(); }
   }
 
   _updateImageState(status) {
-    this._imageState = status
-    const isLoaded = this._imageState === STATUS_LOADED
-    if (isLoaded !== this.state.isLoaded) {
-      this.setState({ isLoaded })
+    this._imageState = status;
+    const shouldDisplaySource = this._imageState === STATUS_LOADED || this._imageState === STATUS_LOADING;
+    // only triggers a re-render when the image is loading (to support PJEG), loaded, or failed
+    if (shouldDisplaySource !== this.state.shouldDisplaySource) {
+      requestAnimationFrame(() => {
+        if (this._isMounted) {
+          this.setState({ shouldDisplaySource });
+        }
+      });
     }
   }
 }
 
-applyNativeMethods(Image)
-
 const styles = StyleSheet.create({
   initial: {
-    alignSelf: 'flex-start',
     backgroundColor: 'transparent',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover'
-  },
-  img: {
-    borderWidth: 0,
-    height: 'auto',
-    maxHeight: '100%',
-    maxWidth: '100%',
-    opacity: 0
-  },
-  children: {
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0
   }
-})
+});
 
 const resizeModeStyles = StyleSheet.create({
   center: {
@@ -234,6 +242,6 @@ const resizeModeStyles = StyleSheet.create({
   stretch: {
     backgroundSize: '100% 100%'
   }
-})
+});
 
-module.exports = Image
+module.exports = applyNativeMethods(Image);

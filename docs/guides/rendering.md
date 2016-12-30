@@ -16,8 +16,9 @@ module.exports = {
 }
 ```
 
-The `react-native-web` package also includes a `core` module that exports only
-`ReactNative`, `Image`, `StyleSheet`, `Text`, `TextInput`, and `View`.
+The `react-native-web` package also includes a `core` module that exports a
+subset of modules: `ReactNative`, `I18nManager`, `Platform`, `StyleSheet`,
+`Image`, `Text`, `TextInput`, `Touchable`, and `View`.
 
 ```js
 // webpack.config.js
@@ -43,12 +44,7 @@ import ReactNative from 'react-native'
 // component that renders the app
 const AppHeaderContainer = (props) => { /* ... */ }
 
-// DOM render
 ReactNative.render(<AppHeaderContainer />, document.getElementById('react-app-header'))
-
-// Server render
-ReactNative.renderToString(<AppHeaderContainer />)
-ReactNative.renderToStaticMarkup(<AppHeaderContainer />)
 ```
 
 Rendering using the `AppRegistry`:
@@ -63,12 +59,27 @@ const AppContainer = (props) => { /* ... */ }
 // register the app
 AppRegistry.registerComponent('App', () => AppContainer)
 
-// DOM render
 AppRegistry.runApplication('App', {
   initialProps: {},
   rootTag: document.getElementById('react-app')
 })
+```
+
+## Server-side rendering
+
+Rendering using the `AppRegistry`:
+
+```js
+import ReactDOMServer from 'react-dom/server'
+import ReactNative, { AppRegistry } from 'react-native'
+
+// component that renders the app
+const AppContainer = (props) => { /* ... */ }
+
+// register the app
+AppRegistry.registerComponent('App', () => AppContainer)
 
 // prerender the app
-const { html, styleElement } = AppRegistry.prerenderApplication('App', { initialProps })
+const { element, stylesheet } = AppRegistry.getApplication('App', { initialProps });
+const initialHTML = ReactDOMServer.renderToString(element);
 ```

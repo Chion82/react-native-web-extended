@@ -14,7 +14,6 @@
 
 /* @edit start */
 const BoundingDimensions = require('./BoundingDimensions');
-const keyMirror = require('fbjs/lib/keyMirror');
 const normalizeColor = require('../../modules/normalizeColor');
 const Position = require('./Position');
 const React = require('react');
@@ -111,16 +110,16 @@ const View = require('../../components/View');
 /**
  * Touchable states.
  */
-var States = keyMirror({
-  NOT_RESPONDER: null,                   // Not the responder
-  RESPONDER_INACTIVE_PRESS_IN: null,     // Responder, inactive, in the `PressRect`
-  RESPONDER_INACTIVE_PRESS_OUT: null,    // Responder, inactive, out of `PressRect`
-  RESPONDER_ACTIVE_PRESS_IN: null,       // Responder, active, in the `PressRect`
-  RESPONDER_ACTIVE_PRESS_OUT: null,      // Responder, active, out of `PressRect`
-  RESPONDER_ACTIVE_LONG_PRESS_IN: null,  // Responder, active, in the `PressRect`, after long press threshold
-  RESPONDER_ACTIVE_LONG_PRESS_OUT: null, // Responder, active, out of `PressRect`, after long press threshold
-  ERROR: null
-});
+var States = {
+  NOT_RESPONDER: 'NOT_RESPONDER',                                     // Not the responder
+  RESPONDER_INACTIVE_PRESS_IN: 'RESPONDER_INACTIVE_PRESS_IN',         // Responder, inactive, in the `PressRect`
+  RESPONDER_INACTIVE_PRESS_OUT: 'RESPONDER_INACTIVE_PRESS_OUT',       // Responder, inactive, out of `PressRect`
+  RESPONDER_ACTIVE_PRESS_IN: 'RESPONDER_ACTIVE_PRESS_IN',             // Responder, active, in the `PressRect`
+  RESPONDER_ACTIVE_PRESS_OUT: 'RESPONDER_ACTIVE_PRESS_OUT',           // Responder, active, out of `PressRect`
+  RESPONDER_ACTIVE_LONG_PRESS_IN: 'RESPONDER_ACTIVE_LONG_PRESS_IN',   // Responder, active, in the `PressRect`, after long press threshold
+  RESPONDER_ACTIVE_LONG_PRESS_OUT: 'RESPONDER_ACTIVE_LONG_PRESS_OUT', // Responder, active, out of `PressRect`, after long press threshold
+  ERROR: 'ERROR'
+};
 
 /**
  * Quick lookup map for states that are considered to be "active"
@@ -147,15 +146,15 @@ var IsLongPressingIn = {
 /**
  * Inputs to the state machine.
  */
-var Signals = keyMirror({
-  DELAY: null,
-  RESPONDER_GRANT: null,
-  RESPONDER_RELEASE: null,
-  RESPONDER_TERMINATED: null,
-  ENTER_PRESS_RECT: null,
-  LEAVE_PRESS_RECT: null,
-  LONG_PRESS_DETECTED: null,
-});
+var Signals = {
+  DELAY: 'DELAY',
+  RESPONDER_GRANT: 'RESPONDER_GRANT',
+  RESPONDER_RELEASE: 'RESPONDER_RELEASE',
+  RESPONDER_TERMINATED: 'RESPONDER_TERMINATED',
+  ENTER_PRESS_RECT: 'ENTER_PRESS_RECT',
+  LEAVE_PRESS_RECT: 'LEAVE_PRESS_RECT',
+  LONG_PRESS_DETECTED: 'LONG_PRESS_DETECTED',
+};
 
 /**
  * Mapping from States x Signals => States
@@ -567,13 +566,13 @@ var TouchableMixin = {
    * @sideeffects
    * @private
    */
-  _remeasureMetricsOnActivation: function(e) {
-    /* @edit begin */
-    UIManager.measure(
-      e.nativeEvent.target,
-      this._handleQueryLayout
-    );
-    /* @edit end */
+  _remeasureMetricsOnActivation: function() {
+    const tag = this.state.touchable.responderID;
+    if (tag == null) {
+      return;
+    }
+
+    UIManager.measure(tag, this._handleQueryLayout);
   },
 
   _handleQueryLayout: function(l, t, w, h, globalX, globalY) {
@@ -685,7 +684,7 @@ var TouchableMixin = {
     }
 
     if (!IsActive[curState] && IsActive[nextState]) {
-      this._remeasureMetricsOnActivation(e);
+      this._remeasureMetricsOnActivation();
     }
 
     if (IsPressingIn[curState] && signal === Signals.LONG_PRESS_DETECTED) {
@@ -693,16 +692,9 @@ var TouchableMixin = {
     }
 
     if (newIsHighlight && !curIsHighlight) {
-      this._savePressInLocation(e);
-      this.touchableHandleActivePressIn && this.touchableHandleActivePressIn(e);
-    } else if (!newIsHighlight && curIsHighlight && this.touchableHandleActivePressOut) {
-      if (this.touchableGetPressOutDelayMS && this.touchableGetPressOutDelayMS()) {
-        this.pressOutDelayTimeout = setTimeout(() => {
-          this.touchableHandleActivePressOut(e);
-        }, this.touchableGetPressOutDelayMS());
-      } else {
-        this.touchableHandleActivePressOut(e);
-      }
+      this._startHighlight(e);
+    } else if (!newIsHighlight && curIsHighlight) {
+      this._endHighlight(e);
     }
 
     if (IsPressingIn[curState] && signal === Signals.RESPONDER_RELEASE) {
@@ -715,49 +707,40 @@ var TouchableMixin = {
 
       var shouldInvokePress =  !IsLongPressingIn[curState] || pressIsLongButStillCallOnPress;
       if (shouldInvokePress && this.touchableHandlePress) {
+        if (!newIsHighlight && !curIsHighlight) {
+          // we never highlighted because of delay, but we should highlight now
+          this._startHighlight(e);
+          this._endHighlight(e);
+        }
         this.touchableHandlePress(e);
       }
     }
 
     this.touchableDelayTimeout && clearTimeout(this.touchableDelayTimeout);
     this.touchableDelayTimeout = null;
-  }
+  },
+
+  _startHighlight: function(e) {
+    this._savePressInLocation(e);
+    this.touchableHandleActivePressIn && this.touchableHandleActivePressIn(e);
+  },
+
+  _endHighlight: function(e) {
+    if (this.touchableHandleActivePressOut) {
+      if (this.touchableGetPressOutDelayMS && this.touchableGetPressOutDelayMS()) {
+        this.pressOutDelayTimeout = setTimeout(() => {
+          this.touchableHandleActivePressOut(e);
+        }, this.touchableGetPressOutDelayMS());
+      } else {
+        this.touchableHandleActivePressOut(e);
+      }
+    }
+  },
 
 };
 
 var Touchable = {
-  Mixin: TouchableMixin,
-  TOUCH_TARGET_DEBUG: false, // Highlights all touchable targets. Toggle with Inspector.
-  /**
-   * Renders a debugging overlay to visualize touch target with hitSlop (might not work on Android).
-   */
-  renderDebugView: ({color, hitSlop}) => {
-    if (!Touchable.TOUCH_TARGET_DEBUG) {
-      return null;
-    }
-    if (process.env.NODE_ENV === 'production') {
-      throw Error('Touchable.TOUCH_TARGET_DEBUG should not be enabled in prod!');
-    }
-    const debugHitSlopStyle = {};
-    hitSlop = hitSlop || {top: 0, bottom: 0, left: 0, right: 0};
-    for (const key in hitSlop) {
-      debugHitSlopStyle[key] = -hitSlop[key];
-    }
-    const hexColor = '#' + ('00000000' + normalizeColor(color).toString(16)).substr(-8);
-    return (
-      <View
-        pointerEvents="none"
-        style={{
-          position: 'absolute',
-          borderColor: hexColor.slice(0, -2) + '55', // More opaque
-          borderWidth: 1,
-          borderStyle: 'dashed',
-          backgroundColor: hexColor.slice(0, -2) + '0F', // Less opaque
-          ...debugHitSlopStyle
-        }}
-      />
-    );
-  }
+  Mixin: TouchableMixin
 };
 
 module.exports = Touchable;
