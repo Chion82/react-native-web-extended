@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native-web';
 
 class TabBarItemIOS extends Component {
-
   static propTypes = {
     badge: PropTypes.any,
     displayIcon: PropTypes.any,
@@ -88,7 +87,6 @@ class TabBarItemIOS extends Component {
       </TouchableOpacity>
     );
   }
-
 }
 
 export default TabBarItemIOS;

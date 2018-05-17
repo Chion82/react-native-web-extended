@@ -3,7 +3,6 @@ import { View } from 'react-native-web';
 import TabBarItemIOS from './TabBarItemIOS';
 
 class ContentWrapper extends Component {
-
   static propTypes = {
     children: PropTypes.any
   }
@@ -18,7 +17,6 @@ class ContentWrapper extends Component {
 }
 
 class TabBarIOS extends Component {
-
   static Item = TabBarItemIOS
 
   static propTypes = {
@@ -102,7 +100,6 @@ class TabBarIOS extends Component {
       </View>
     );
   }
-
 }
 
 export default TabBarIOS;
