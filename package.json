@@ -25,7 +25,6 @@
     "deep-assign": "^2.0.0",
     "fbjs": "^0.8.4",
     "inline-style-prefixer": "^2.0.1",
-    "lodash": "^4.13.1",
     "react-router": "^2.6.1",
     "react-textarea-autosize": "^4.0.4",
     "react-timer-mixin": "^0.13.3"

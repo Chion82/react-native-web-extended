@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native-web';
-import _ from 'lodash';
 
 class TabBarItemIOS extends Component {
 
@@ -37,11 +36,11 @@ class TabBarItemIOS extends Component {
       width: 26,
       height: 26
     };
-    return _.assign(defaultStyle, this.props.style);
+    return Object.assign(defaultStyle, this.props.style);
   }
 
   getWrapperProps() {
-    const props = _.clone(this.props);
+    const props = Object.assign({}, this.props);
     if (props.style) {
       delete props.style;
     }
