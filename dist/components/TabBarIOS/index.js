@@ -1,7 +1,6 @@
-Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _react=require('react');var _react2=_interopRequireDefault(_react);
-var _View=require('../View');var _View2=_interopRequireDefault(_View);
-var _TabBarItemIOS=require('./TabBarItemIOS');var _TabBarItemIOS2=_interopRequireDefault(_TabBarItemIOS);
-var _lodash=require('lodash');var _lodash2=_interopRequireDefault(_lodash);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
+Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _jsxFileName='src/components/TabBarIOS/index.js';var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _react=require('react');var _react2=_interopRequireDefault(_react);
+var _reactNativeWeb=require('react-native-web');
+var _TabBarItemIOS=require('./TabBarItemIOS');var _TabBarItemIOS2=_interopRequireDefault(_TabBarItemIOS);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return call&&(typeof call==="object"||typeof call==="function")?call:self;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function, not "+typeof superClass);}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass;}var
 
 ContentWrapper=function(_Component){_inherits(ContentWrapper,_Component);function ContentWrapper(){_classCallCheck(this,ContentWrapper);return _possibleConstructorReturn(this,(ContentWrapper.__proto__||Object.getPrototypeOf(ContentWrapper)).apply(this,arguments));}_createClass(ContentWrapper,[{key:'shouldComponentUpdate',value:function shouldComponentUpdate()
 
@@ -14,7 +13,7 @@ return false;
 }},{key:'render',value:function render()
 
 {
-return _react2.default.createElement('div',null,this.props.children);
+return _react2.default.createElement('div',{__source:{fileName:_jsxFileName,lineNumber:16}},this.props.children);
 }}]);return ContentWrapper;}(_react.Component);process.env.NODE_ENV!=="production"?ContentWrapper.propTypes={children:_react.PropTypes.any}:void 0;var
 
 
@@ -43,7 +42,7 @@ flex:1,
 flexDirection:'row',
 alignItems:'center'};
 
-var style=_lodash2.default.assign(defaultStyle,this.props.style);
+var style=_extends(defaultStyle,this.props.style);
 return style;
 }},{key:'getContentView',value:function getContentView()
 
@@ -56,8 +55,8 @@ props={style:{display:'initial'}};
 props={style:{display:'none'}};
 }
 return(
-_react2.default.createElement('div',_extends({},props,{key:index}),
-_react2.default.createElement(ContentWrapper,null,child.props.children)));
+_react2.default.createElement('div',_extends({},props,{key:index,__source:{fileName:_jsxFileName,lineNumber:58}}),
+_react2.default.createElement(ContentWrapper,{__source:{fileName:_jsxFileName,lineNumber:59}},child.props.children)));
 
 
 });
@@ -78,7 +77,7 @@ textColor=_this3.props.tintColor||'#039BE5';
 
 var TabBarItem=child.type;
 
-var tab=_react2.default.createElement(TabBarItem,_extends({displayIcon:displayIcon,textColor:textColor},child.props,{key:index}));
+var tab=_react2.default.createElement(TabBarItem,_extends({displayIcon:displayIcon,textColor:textColor},child.props,{key:index,__source:{fileName:_jsxFileName,lineNumber:80}}));
 tabs.push(tab);
 });
 return tabs;
@@ -86,18 +85,18 @@ return tabs;
 
 {
 return(
-_react2.default.createElement(_View2.default,{style:{
+_react2.default.createElement(_reactNativeWeb.View,{style:{
 flex:1,
-flexDirection:'column'}},
+flexDirection:'column'},__source:{fileName:_jsxFileName,lineNumber:88}},
 
-_react2.default.createElement(_View2.default,{style:{
+_react2.default.createElement(_reactNativeWeb.View,{style:{
 alignSelf:'stretch',
-paddingBottom:50}},
+paddingBottom:50},__source:{fileName:_jsxFileName,lineNumber:92}},
 
 this.getContentView()),
 
 
-_react2.default.createElement(_View2.default,{className:'tabbarios-tabbar-container',style:this.getTabBarStyle()},
+_react2.default.createElement(_reactNativeWeb.View,{className:'tabbarios-tabbar-container',style:this.getTabBarStyle(),__source:{fileName:_jsxFileName,lineNumber:99}},
 this.renderTabs())));
 
 

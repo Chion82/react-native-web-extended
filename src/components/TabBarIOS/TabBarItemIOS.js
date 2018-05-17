@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import View from '../View';
-import Image from '../Image';
-import Text from '../Text';
-import TouchableOpacity from '../Touchable/TouchableOpacity';
+import { Image, Text, TouchableOpacity, View } from 'react-native-web';
 import _ from 'lodash';
 
 class TabBarItemIOS extends Component {

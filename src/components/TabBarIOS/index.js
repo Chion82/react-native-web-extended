@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import View from '../View';
+import { View } from 'react-native-web';
 import TabBarItemIOS from './TabBarItemIOS';
 import _ from 'lodash';
 
