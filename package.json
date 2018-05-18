@@ -17,7 +17,8 @@
     "test:watch": "npm run test:jest -- --watch"
   },
   "dependencies": {
-    "@piranna/react-pull-to-refresh": "^1.1.2"
+    "@piranna/react-pull-to-refresh": "^1.1.2",
+    "prop-types": "^15.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

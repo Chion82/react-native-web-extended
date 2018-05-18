@@ -1,4 +1,5 @@
 /* eslint-disable */
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {ActivityIndicator} from 'react-native-web';
 import ReactPullToRefresh from '@piranna/react-pull-to-refresh';
@@ -46,10 +47,10 @@ const css = `.ptr-element .pull-down-icon {
 class RefreshControl extends Component {
 
   static propTypes = {
-    children: React.PropTypes.any,
-    onRefresh: React.PropTypes.func.isRequired,
-    refreshing: React.PropTypes.bool.isRequired,
-    style: React.PropTypes.any
+    children: PropTypes.any,
+    onRefresh: PropTypes.func.isRequired,
+    refreshing: PropTypes.bool.isRequired,
+    style: PropTypes.any
   }
 
   handleRefresh(resolve) {
