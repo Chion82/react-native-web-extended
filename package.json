@@ -17,6 +17,9 @@
     "test:jest": "jest",
     "test:watch": "npm run test:jest -- --watch"
   },
+  "dependencies": {
+    "react-pull-to-refresh": "github:piranna/react-pull-to-refresh"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
