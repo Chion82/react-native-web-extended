@@ -1,12 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import View from '../View';
-import Image from '../Image';
-import Text from '../Text';
-import TouchableOpacity from '../Touchable/TouchableOpacity';
-import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Image, Text, TouchableOpacity, View } from 'react-native-web';
 
 class TabBarItemIOS extends Component {
-
   static propTypes = {
     badge: PropTypes.any,
     displayIcon: PropTypes.any,
@@ -40,11 +36,11 @@ class TabBarItemIOS extends Component {
       width: 26,
       height: 26
     };
-    return _.assign(defaultStyle, this.props.style);
+    return Object.assign(defaultStyle, this.props.style);
   }
 
   getWrapperProps() {
-    const props = _.clone(this.props);
+    const props = Object.assign({}, this.props);
     if (props.style) {
       delete props.style;
     }
@@ -92,7 +88,6 @@ class TabBarItemIOS extends Component {
       </TouchableOpacity>
     );
   }
-
 }
 
 export default TabBarItemIOS;

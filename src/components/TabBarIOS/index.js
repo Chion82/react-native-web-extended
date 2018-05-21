@@ -1,10 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import View from '../View';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { View } from 'react-native-web';
 import TabBarItemIOS from './TabBarItemIOS';
-import _ from 'lodash';
 
 class ContentWrapper extends Component {
-
   static propTypes = {
     children: PropTypes.any
   }
@@ -19,7 +18,6 @@ class ContentWrapper extends Component {
 }
 
 class TabBarIOS extends Component {
-
   static Item = TabBarItemIOS
 
   static propTypes = {
@@ -43,7 +41,7 @@ class TabBarIOS extends Component {
       flexDirection: 'row',
       alignItems: 'center'
     };
-    const style = _.assign(defaultStyle, this.props.style);
+    const style = Object.assign(defaultStyle, this.props.style);
     return style;
   }
 
@@ -103,7 +101,6 @@ class TabBarIOS extends Component {
       </View>
     );
   }
-
 }
 
 export default TabBarIOS;

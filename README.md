@@ -19,10 +19,6 @@ Extended components
 -------------------
 Currently 3 more components from [React Native](https://facebook.github.io/react-native/) are added.
 
-## Navigator
-
-`Navigator` from [React Native](https://facebook.github.io/react-native/) is re-implemented with [react-router](https://github.com/reactjs/react-router).
-
 ### Usage:
 
 ```JavaScript
